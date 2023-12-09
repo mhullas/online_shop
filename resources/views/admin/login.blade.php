@@ -19,6 +19,7 @@
 			  	<div class="card-header text-center">
 					<a href="#" class="h3">Administrative Panel</a>
 			  	</div>
+				  @include('admin.message')
 			  	<div class="card-body">
 					<p class="login-box-msg">Sign in to start your session</p>
 					<form action="{{ route('admin.authenticate') }}" method="post">
