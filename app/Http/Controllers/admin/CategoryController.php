@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -32,12 +33,28 @@ class CategoryController extends Controller
             $category->save();
 
             //image Upload
-            
-            
+            if (!empty($request->image_id)){
+                $tempImage = TempImage::find($request->image_id);
+                $extArray = explode('.', $tempImage);
+                $ext = last($extArray);
+                $newImgName = $request->image_id.'.'.$ext;
+
+
+                $image->move(public_path('/temp_images'), $newName);
+
+                $spath = public_path('/temp/');
+                $dpath = public_path('/Uploads/Category/'.$newImgName);
+                File::copy($spath,$dpath);
+
+                $category->image = $request->image;
+                $category->save();
+            }
+
+
         } else {
             return response()->json([
                 'status' => false,
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ]);
         }
     }
