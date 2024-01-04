@@ -33,23 +33,27 @@ class CategoryController extends Controller
             $category->save();
 
             //image Upload
-            if (!empty($request->image_id)){
-                $tempImage = TempImage::find($request->image_id);
-                $extArray = explode('.', $tempImage);
+            $img_id = $request->image_id;
+            if (!empty($img_id)){
+                $tempImage = new TempImage();
+                $imgFind = $tempImage->find($img_id);
+                $extArray = explode('.', $imgFind->name);
                 $ext = last($extArray);
-                $newImgName = $request->image_id.'.'.$ext;
+                $newImgName = $category->id.'.'.$ext;
 
+                //copy or move
+                $sPath = public_path().'/temp_images/'.$imgFind->name;
+                $dPath = public_path().'/Uploads/Category/'.$newImgName;
+                File::move($sPath, $dPath);
 
-                $image->move(public_path('/temp_images'), $newName);
-
-                $spath = public_path('/temp/');
-                $dpath = public_path('/Uploads/Category/'.$newImgName);
-                File::copy($spath,$dpath);
-
-                $category->image = $request->image;
+                $category->image = $newImgName;
                 $category->save();
             }
-
+            session()->flash('sucess','Category Added !!');
+            return response()->json([
+                'status' => true,
+                'message' => 'Category Added !!'
+            ]);
 
         } else {
             return response()->json([

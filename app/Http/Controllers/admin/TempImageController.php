@@ -18,7 +18,7 @@ class TempImageController extends Controller
             $tempImage = new TempImage();
             $tempImage->name = $newName;
             $tempImage->save();
-            $image->move(public_path('/temp_images'), $newName);
+            $image->move(public_path('/temp_images/'), $newName);
 
             return response()->json([
                 'status' => true,

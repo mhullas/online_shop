@@ -1,5 +1,5 @@
 <script>
-    //form_validation
+    //form_submit
     $('#categoryForm').submit(function(event) {
         event.preventDefault();
         $.ajax({
