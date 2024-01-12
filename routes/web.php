@@ -24,8 +24,10 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
 
         //Category
+        Route::get('/category/list', [CategoryController::class, 'index'])->name('category.list');
         Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
         Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
         Route::post('/upload-temp-image', [TempImageController::class, 'tempImage'])->name('temp-images.create');
+        Route::get('/getSlug', [CategoryController::class, 'getSlug'])->name('getSlug');
     });
 });

@@ -15,6 +15,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
+    @notifyCss
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -97,6 +98,8 @@
             }
         });
     </script>
+    @notifyJs
+    @include('notify::components.notify')
 
     @yield('customJs')
 

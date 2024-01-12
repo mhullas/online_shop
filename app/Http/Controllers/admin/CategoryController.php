@@ -8,9 +8,15 @@ use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    public function index(){
+        $categories = Category::latest()->get();
+        return view('admin.category.list',compact('categories'));
+    }
+
     public function create()
     {
         return view('admin.category.create');
@@ -18,7 +24,6 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'slug' => 'required|unique:categories',
@@ -49,17 +54,30 @@ class CategoryController extends Controller
                 $category->image = $newImgName;
                 $category->save();
             }
-            session()->flash('sucess','Category Added !!');
+            $notify = notify()->success('Category Added !!');
+            //session()->flash('success','Category Added - flash !!');
             return response()->json([
                 'status' => true,
                 'message' => 'Category Added !!'
             ]);
-
+            
+            return redirect()->route('category.list')->with('success', 'Category Added !!');
         } else {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors(),
             ]);
         }
+    }
+
+    public function getSlug(Request $request){
+        $slug = '';
+        if (!empty($request->name)){
+            $slug = Str::slug($request->name);
+        }
+        return response()->json([
+            'status' => true,
+            'slug' => $slug
+        ]);
     }
 }

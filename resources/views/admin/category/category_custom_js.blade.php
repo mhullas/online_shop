@@ -8,6 +8,9 @@
             data: $(this).serializeArray(),
             dataType: 'json',
             success: function(response) {
+                if (response["status"] == true){
+                    window.location.href="{{ route('category.list') }}";
+                }
                 var errors = response['errors'];
                 if (errors['name']) {
                     $('#name').addClass('is-invalid').siblings('p').addClass('invalid-feedback')
@@ -35,11 +38,26 @@
     $('#name').on('keyup', function(){
         $('#name').removeClass('is-invalid').siblings('p').removeClass(
                         'invalid-feedback').html('');
-    })
-    $('#slug').on('keyup', function(){
+    });
+    $('#slug').change(function(){
         $('#slug').removeClass('is-invalid').siblings('p').removeClass(
                         'invalid-feedback').html('');
-    })
+    });
+
+    //Get Slug
+    $('#name').change(function(){
+        $.ajax({
+            url: '{{ route('getSlug') }}',
+            type: 'get',
+            data: {name: $(this).val()},
+            dataType: 'json',
+            success: function(response){
+                if (response["status"] == true){
+                    $('#slug').val(response["slug"]);
+                }
+            }
+        })
+    });
 
     //image_upload
     Dropzone.autoDiscover = false;
