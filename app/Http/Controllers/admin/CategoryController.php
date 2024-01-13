@@ -54,7 +54,6 @@ class CategoryController extends Controller
                 $category->image = $newImgName;
                 $category->save();
             }
-            $notify = notify()->success('Category Added !!');
             //session()->flash('success','Category Added - flash !!');
             return response()->json([
                 'status' => true,
@@ -62,6 +61,7 @@ class CategoryController extends Controller
             ]);
             
             return redirect()->route('category.list')->with('success', 'Category Added !!');
+            $notify = notify()->success('Category Added !!');
         } else {
             return response()->json([
                 'status' => false,

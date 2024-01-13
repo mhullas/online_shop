@@ -98,11 +98,10 @@
             }
         });
     </script>
-    @notifyJs
-    @include('notify::components.notify')
 
     @yield('customJs')
-
+    <x-notify::notify />
+    @notifyJs
 </body>
 
 </html>
