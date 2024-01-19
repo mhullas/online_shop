@@ -1,10 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+{{-- admin alert style --}}
+<style>
+    .colored-toast.swal2-icon-success {
+        background-color: #a5dc86 !important;
+    }
+
+    .colored-toast.swal2-icon-error {
+        background-color: #f27474 !important;
+    }
+
+    .colored-toast.swal2-icon-warning {
+        background-color: #f8bb86 !important;
+    }
+
+    .colored-toast.swal2-icon-info {
+        background-color: #3fc3ee !important;
+    }
+
+    .colored-toast.swal2-icon-question {
+        background-color: #87adbd !important;
+    }
+
+    .colored-toast .swal2-title {
+        color: white;
+    }
+
+    .colored-toast .swal2-close {
+        color: white;
+    }
+
+    .colored-toast .swal2-html-container {
+        color: white;
+    }
+</style>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Laravel Shop :: Administrative Panel</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -15,7 +50,6 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
-    @notifyCss
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -90,7 +124,7 @@
     <script src="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
-	<!-- CSRF TOKEN -->
+    <!-- CSRF TOKEN -->
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -98,10 +132,7 @@
             }
         });
     </script>
-
     @yield('customJs')
-    <x-notify::notify />
-    @notifyJs
 </body>
 
 </html>

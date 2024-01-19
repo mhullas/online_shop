@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 class CategoryController extends Controller
 {
     public function index(){
-        $categories = Category::latest()->get();
+        $categories = Category::latest()->paginate(10);
         return view('admin.category.list',compact('categories'));
     }
 
@@ -54,14 +54,13 @@ class CategoryController extends Controller
                 $category->image = $newImgName;
                 $category->save();
             }
-            //session()->flash('success','Category Added - flash !!');
+            session()->flash('success','Category Added - flash !!');
             return response()->json([
                 'status' => true,
                 'message' => 'Category Added !!'
             ]);
             
             return redirect()->route('category.list')->with('success', 'Category Added !!');
-            $notify = notify()->success('Category Added !!');
         } else {
             return response()->json([
                 'status' => false,

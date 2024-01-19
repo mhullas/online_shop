@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    @include('admin.message')
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
@@ -17,7 +18,6 @@
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
-        @include('admin.message')
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
@@ -47,9 +47,9 @@
                         </thead>
                         <tbody>
                             @foreach ($categories as $category)
-                            <tr>
+                                <tr>
                                     <td>1</td>
-                                    <td><img width="100px" src="{{ asset('Uploads/Category/'.$category->image) }}"></td>
+                                    <td><img width="100px" src="{{ asset('Uploads/Category/' . $category->image) }}"></td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
                                     <td>
@@ -79,18 +79,14 @@
                                             </svg>
                                         </a>
                                     </td>
-                            </tr>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="card-footer clearfix">
                     <ul class="pagination pagination m-0 float-right">
-                        <li class="page-item"><a class="page-link" href="#">«</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">»</a></li>
+                        {{ $categories->links() }}
                     </ul>
                 </div>
             </div>
