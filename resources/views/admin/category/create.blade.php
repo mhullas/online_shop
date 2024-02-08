@@ -26,14 +26,16 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="name">Name</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                                    <input type="text" name="name" id="name" class="form-control"
+                                        placeholder="Name">
                                     <p></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="email">Slug</label>
-                                    <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug">
+                                    <input type="text" name="slug" id="slug" class="form-control"
+                                        placeholder="Slug">
                                     <p></p>
                                 </div>
                             </div>
@@ -62,7 +64,7 @@
                 </div>
                 <div class="pb-5 pt-3">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="brands.html" class="btn btn-outline-dark ml-3">Cancel</a>
+                    <a href="{{ route('category.list') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </div>
         </form>
@@ -72,5 +74,5 @@
 @endsection
 
 @section('customJs')
-@include('admin.category.category_custom_js')
+    @include('admin.category.category_custom_js')
 @endsection

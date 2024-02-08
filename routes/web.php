@@ -26,7 +26,10 @@ Route::group(['prefix' => 'admin'], function(){
         //Category
         Route::get('/category/list', [CategoryController::class, 'index'])->name('category.list');
         Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
+        Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
         Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
+        Route::put('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::get('/category/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
         Route::post('/upload-temp-image', [TempImageController::class, 'tempImage'])->name('temp-images.create');
         Route::get('/getSlug', [CategoryController::class, 'getSlug'])->name('getSlug');
     });

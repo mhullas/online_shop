@@ -2,6 +2,8 @@
 
 @section('content')
     @include('admin.message')
+    @include('admin.category.add_category_modal')
+    @include('admin.category.edit_category_modal')
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
@@ -10,6 +12,9 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('category.create') }}" class="btn btn-primary">Add Category</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_category">
+                        Launch demo modal
+                    </button>
                 </div>
             </div>
         </div>
@@ -49,19 +54,29 @@
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>1</td>
-                                    <td><img width="100px" src="{{ asset('Uploads/Category/' . $category->image) }}"></td>
+                                    <td><img width="100px" src="{{ asset('Uploads/Category/thumb/' . $category->image) }}"></td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
                                     <td>
-                                        <svg class="text-success-500 h-6 w-6 text-success"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
+                                        @if ($category->status == 1)
+                                            <svg class="text-success-500 h-6 w-6 text-success"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                </path>
+                                            </svg>
+                                        @endif
                                     </td>
                                     <td>
-                                        <a href="#">
+                                        <a href="javascript://" class="edit_cat" data-id="{{ $category->id }}">
                                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path
@@ -69,7 +84,7 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <a href="#" class="text-danger w-4 h-4 mr-1">
+                                        <a href="{{ route('category.delete', $category->id) }}" class="text-danger w-4 h-4 mr-1">
                                             <svg wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -96,4 +111,5 @@
 @endsection
 
 @section('customJs')
+    @include('admin.category.category_custom_js')
 @endsection
