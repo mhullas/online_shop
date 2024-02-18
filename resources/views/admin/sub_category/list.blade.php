@@ -2,18 +2,18 @@
 
 @section('content')
     @include('admin.message')
-    @include('admin.category.add_category_modal')
-    @include('admin.category.edit_category_modal')
+    @include('admin.sub_category.add_modal')
+    @include('admin.sub_category.edit')
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Categories</h1>
+                    <h1>Sub Categories</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('category.create') }}" class="btn btn-primary">Add Category</a>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_category">
-                        Launch demo modal
+                    <a href="{{ route('sub-category.create') }}" class="btn btn-primary">Add Sub Category</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_subCategory">
+                        Add New Sub Category
                     </button>
                 </div>
             </div>
@@ -43,22 +43,22 @@
                         <thead>
                             <tr>
                                 <th width="60">ID</th>
-                                <th>Image</th>
                                 <th>Name</th>
+                                <th>Category</th>
                                 <th>Slug</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($categories as $category)
+                            @foreach ($subCategory as $item)
                                 <tr>
-                                    <td>1</td>
-                                    <td><img width="100px" src="{{ asset('Uploads/Category/thumb/' . $category->image) }}"></td>
-                                    <td>{{ $category->name }}</td>
-                                    <td>{{ $category->slug }}</td>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->categoryName }}</td>
+                                    <td>{{ $item->slug }}</td>
                                     <td>
-                                        @if ($category->status == 1)
+                                        @if ($item->status == 1)
                                             <svg class="text-success-500 h-6 w-6 text-success"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -76,7 +76,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="javascript://" class="edit_cat" data-id="{{ $category->id }}">
+                                        <a href="javascript://" class="edit_sub_cat" data-id="{{ $item->id }}">
                                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path
@@ -84,7 +84,8 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <a href="javascript://" onclick="deleteCategory({{ $category->id }})" class="text-danger w-4 h-4 mr-1 delCat">
+                                        <a href="javascript://" onclick="deleteCategory({{ $item->id }})"
+                                            class="text-danger w-4 h-4 mr-1 delCat">
                                             <svg wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -101,7 +102,7 @@
                 </div>
                 <div class="card-footer clearfix">
                     <ul class="pagination pagination m-0 float-right">
-                        {{ $categories->links() }}
+                        {{ $subCategory->links() }}
                     </ul>
                 </div>
             </div>
@@ -111,5 +112,5 @@
 @endsection
 
 @section('customJs')
-    @include('admin.category.category_custom_js')
+    @include('admin.sub_category.custom_js')
 @endsection

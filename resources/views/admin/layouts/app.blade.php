@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {{-- admin alert style --}}
-<style>
+{{-- <style>
     .colored-toast.swal2-icon-success {
         background-color: #a5dc86 !important;
     }
@@ -33,13 +33,13 @@
     .colored-toast .swal2-html-container {
         color: white;
     }
-</style>
+</style> --}}
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <title>Laravel Shop :: Administrative Panel</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -50,6 +50,9 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
+    <script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -116,7 +119,6 @@
     </div>
     <!-- ./wrapper -->
     <!-- jQuery -->
-    <script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->

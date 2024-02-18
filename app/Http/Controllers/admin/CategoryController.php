@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
@@ -58,10 +57,19 @@ class CategoryController extends Controller
                 $int_img = $manager->read($sPath);
                 $int_img = $int_img->resize(560, 400);
                 $int_img->toJpeg(300)->save(public_path() . '/Uploads/Category/thumb/' . $newImgName);
-                File::copy($sPath, $dPath);
+                File::move($sPath, $dPath);
 
                 $category->image = $newImgName;
                 $category->save();
+
+                //delete TempImage
+                $imgId = $category->image_id;
+                if (!empty($imgId)) {
+                    $tempImage = TempImage::find($imgId);
+                    $tempImage->delete();
+                    // $sPath = public_path() . '/temp_images/' . $tempImage->name;
+                    // File::delete($sPath);
+                }
             }
             session()->flash('success', 'Category Added - flash !!');
             return response()->json([
@@ -69,7 +77,7 @@ class CategoryController extends Controller
                 'message' => 'Category Added !!'
             ]);
 
-            return back()->with('success', 'Category Added !!');
+            return redirect()->route('category.list')->with('success', 'Category Added !!');
         } else {
             return response()->json([
                 'status' => false,
@@ -91,11 +99,12 @@ class CategoryController extends Controller
     {
 
         $category = Category::find($categoryId);
-        if (empty($categoryId)) {
+        if (empty($category)) {
+            session()->flash('error', 'Category not Found !!');
             return response()->json([
                 'status' => false,
-                'notfound' => true,
-                'message' => 'Category Not Found !!'
+                'message' => 'Category Not Found !!',
+                'notfound' => true
             ]);
         }
 
@@ -131,6 +140,15 @@ class CategoryController extends Controller
 
                 $category->image = $newImgName;
                 $category->save();
+
+                // //Delete TempImage
+                // $imgId = $category->image_id;
+                // if (!empty($imgId)) {
+                //     $tempImage = TempImage::find($imgId);
+                //     $tempImage->delete();
+                //     $sPath = public_path() . '/temp_images/' . $tempImage->name;
+                //     File::delete($sPath);
+                // }
             }
             session()->flash('success', 'Category Updated !!');
             return response()->json([
@@ -138,7 +156,7 @@ class CategoryController extends Controller
                 'message' => 'Category Added !!'
             ]);
 
-            return back()->with('success', 'Category Updated !!');
+            return redirect()->route('category.list')->with('success', 'Category Updated !!');
         } else {
             return response()->json([
                 'status' => false,
@@ -147,26 +165,29 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete($id)
+    public function destroy($id, Request $request)
     {
-        if (!empty($id)) {
-            $category = Category::find($id);
-            $imgId = $category->image_id;
-            $tempImage = TempImage::find($imgId);
 
-            $category->delete();
-            $sPath = public_path() . '/temp_images/' . $tempImage->name;
-            $dPath = public_path() . '/Uploads/Category/thumb/' . $category->image;
-            $mPath = public_path() . '/Uploads/Category/' . $category->image;
-            File::delete($sPath, $dPath, $mPath);
-            //    session()->flash('success', 'Category Deleted !!');
-
-            return back()->with('success', 'Category Deleted !!');
-            //    return response()->json([
-            //     'status' => true,
-            //     'message' => 'Category Deleted.'
-            //    ]);
+        $category = Category::find($id);
+        if (empty($category)) {
+            session()->flash('error', 'Category not Found !!');
+            return response()->json([
+                'status' => true,
+                'message' => 'Category not Found.'
+            ]);
         }
+        $category->delete();
+
+        $sPath = public_path() . '/Uploads/Category/thumb/' . $category->image;
+        $dPath = public_path() . '/Uploads/Category/' . $category->image;
+
+        File::delete($sPath, $dPath);
+
+        session()->flash('success', 'Category Deleted !!');
+        return response()->json([
+            'status' => true,
+            'message' => 'Category Deleted.'
+        ]);
     }
 
     public function getSlug(Request $request)

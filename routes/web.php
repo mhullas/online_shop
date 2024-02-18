@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,13 +25,27 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
 
         //Category
-        Route::get('/category/list', [CategoryController::class, 'index'])->name('category.list');
-        Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
-        Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-        Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
-        Route::put('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
-        Route::get('/category/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+        Route::controller(CategoryController::class)->group(function(){
+            Route::get('/category/list', 'index')->name('category.list');
+            Route::get('/category/create', 'create')->name('category.create');
+            Route::get('/category/edit/{id}', 'edit')->name('category.edit');
+            Route::post('/category/store', 'store')->name('category.store');
+            Route::put('/category/update/{id}', 'update')->name('category.update');
+            Route::delete('/category/delete/{id}', 'destroy')->name('category.delete');
+        });
+
+        //Common Files
         Route::post('/upload-temp-image', [TempImageController::class, 'tempImage'])->name('temp-images.create');
-        Route::get('/getSlug', [CategoryController::class, 'getSlug'])->name('getSlug');
+        Route::get('/getSlug',[CategoryController::class, 'getSlug'])->name('getSlug');
+
+        //Sub_category
+        Route::controller(SubCategoryController::class)->group(function(){
+            Route::get('/sub-category/create', 'create')->name('sub-category.create');
+            Route::get('/sub-category/edit/{id}', 'edit')->name('sub-category.edit');
+            Route::get('/sub-category', 'index')->name('sub-category.list');
+            Route::post('/sub-category/store', 'store')->name('sub-category.store');
+            Route::put('/sub-category/update/{id}', 'update')->name('sub-category.update');
+        });
+
     });
 });

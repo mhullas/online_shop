@@ -1,15 +1,15 @@
 <script>
     //form_submit
-    $('#categoryForm').submit(function(event) {
+    $('#subCategoryForm').submit(function(event) {
         event.preventDefault();
         $.ajax({
-            url: '{{ route("category.store") }}',
+            url: '{{ route('sub-category.store') }}',
             type: 'post',
             data: $(this).serializeArray(),
             dataType: 'json',
             success: function(response) {
                 if (response["status"] == true) {
-                    window.location.href = "{{ route('category.list') }}";
+                    window.location.href = "{{ route('sub-category.list') }}";
                 }
                 var errors = response['errors'];
                 if (errors['name']) {
@@ -30,6 +30,15 @@
                         'invalid-feedback').html('');
                 }
 
+                if (errors['category']) {
+                    $('#category').addClass('is-invalid').siblings('p').addClass(
+                            'invalid-feedback')
+                        .html(errors['category']);
+                } else {
+                    $('#category').removeClass('is-invalid').siblings('p').removeClass(
+                        'invalid-feedback').html('');
+                }
+
             },
             error: function(jqXHR, exception) {
                 console.log('Something Went Wrong !');
@@ -42,7 +51,10 @@
         $('#name').removeClass('is-invalid').siblings('p').removeClass(
             'invalid-feedback').html('');
     });
-
+    $('#category').on('change', function() {
+        $('#category').removeClass('is-invalid').siblings('p').removeClass(
+            'invalid-feedback').html('');
+    });
 
     //Get Slug
     $('#name').on('keyup', function() {
@@ -61,36 +73,6 @@
                 }
             }
         })
-    });
-
-    //image_upload
-    Dropzone.autoDiscover = false;
-    const dropzone = $("#image").dropzone({
-        init: function() {
-            this.on('addedfile', function(file) {
-                if (this.files.length > 1) {
-                    this.removeFile(this.files[0]);
-                }
-            });
-        },
-        url: "{{ route('temp-images.create') }}",
-        maxFiles: 1,
-        paramName: 'image',
-        addRemoveLinks: true,
-        acceptedFiles: "image/jpeg,image/png,image/gif",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(file, response) {
-            $("#image_id").val(response.image_id);
-            //console.log(response)
-        }
-    });
-
-    //form validation
-    $('#up_name').on('keyup', function() {
-        $('#up_name').removeClass('is-invalid').siblings('p').removeClass(
-            'invalid-feedback').html('');
     });
 
     //Get Update Slug
@@ -113,55 +95,41 @@
     });
 
     //get edit value
-    $(document).on('click', '.edit_cat', function() {
+    $(document).on('click', '.edit_sub_cat', function() {
 
-        var cat_id = $(this).data('id');
-        //alert(cat_id);
-        $('#edit_category').modal('show');
+        var subCat_id = $(this).data('id');
+        $('#edit_sub_category').modal('show');
 
         $.ajax({
             type: 'get',
-            url: '/admin/category/edit/' + cat_id,
+            url: '/admin/sub-category/edit/' + subCat_id,
             success: function(response) {
-                // console.log(response.getCategory.name);
-                $('#up_name').val(response.getCategory.name);
-                $('#up_slug').val(response.getCategory.slug);
-                $('#showimg').prop('src', '/Uploads/Category/thumb/' + response.getCategory.image);
-                $('#up_status').val(response.getCategory.status);
-                $('#cat_up_id').val(response.getCategory.id);
+                $('#up_category').val(response.getSubCategory.category_id);
+                $('#up_name').val(response.getSubCategory.name);
+                $('#up_slug').val(response.getSubCategory.slug);
+                $('#up_status').val(response.getSubCategory.status);
+                $('#updateId').val(response.getSubCategory.id);
             }
         });
-
-
-        // var name = $(this).data('name');
-        // var slug = $(this).data('slug');
-        // var image = $(this).data('image');
-        // var status = $(this).data('status');
-
-        // //set value
-        // $('#up_name').val(name);
-        // $('#up_slug').val(slug);
-        // $('#showimg').prop('src', '/Uploads/Category/' + image);
-        // $('#up_status').val(status);
     });
 
-    //Update_Category_form
-    $('#updateCategoryForm').submit(function(event) {
+    //Update_Sub_Category_form
+    $('#updateSubCategoryForm').submit(function(event) {
         event.preventDefault();
 
-        var editCatId = $('#cat_up_id').val();
+        var updateId = $('#updateId').val();
 
         $.ajax({
-            url: '/admin/category/update/' + editCatId,
+            url: '/admin/sub-category/update/' + updateId,
             type: 'put',
             data: $(this).serializeArray(),
             dataType: 'json',
             success: function(response) {
                 if (response["status"] == true) {
-                    window.location.href = "{{ route('category.list') }}";
+                    window.location.href = "{{ route('sub-category.list') }}";
                 } else {
                     if (response['notfound'] == true) {
-                        window.location.href = "{{ route('category.list') }}";
+                        window.location.href = "{{ route('sub-category.list') }}";
                     }
                     var errors = response['errors'];
                     if (errors['up_name']) {
@@ -181,58 +149,20 @@
                         $('#up_slug').removeClass('is-invalid').siblings('p').removeClass(
                             'invalid-feedback').html('');
                     }
+
+                    if (errors['up_category']) {
+                        $('#up_category').addClass('is-invalid').siblings('p').addClass(
+                                'invalid-feedback')
+                            .html(errors['up_category']);
+                    } else {
+                        $('#up_category').removeClass('is-invalid').siblings('p').removeClass(
+                            'invalid-feedback').html('');
+                    }
                 }
             },
             error: function(jqXHR, exception) {
                 console.log('Something Went Wrong !');
             }
         });
-    });
-
-    //delete confirmation
-    function deleteCategory(id) {
-        var url = '{{ route('category.delete', 'ID') }}';
-        var newUrl = url.replace("ID", id)
-
-        if (confirm("Are you sure to delete category ?")) {
-            $.ajax({
-                url: newUrl,
-                type: 'delete',
-                data: {},
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response["status"]) {
-                        window.location.href = "{{ route('category.list') }}";
-                    }
-                }
-            });
-        }
-    }
-
-    //image_upload
-    Dropzone.autoDiscover = false;
-    const mydropzone = $("#up_image").dropzone({
-        init: function() {
-            this.on('addedfile', function(file) {
-                if (this.files.length > 1) {
-                    this.removeFile(this.files[0]);
-                }
-            });
-        },
-        url: "{{ route('temp-images.create') }}",
-        maxFiles: 1,
-        paramName: 'image',
-        addRemoveLinks: true,
-        acceptedFiles: "image/jpeg,image/png,image/gif",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(file, response) {
-            $("#up_imageId").val(response.image_id);
-            //console.log(response)
-        }
     });
 </script>
