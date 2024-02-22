@@ -32,6 +32,7 @@ Route::group(['prefix' => 'admin'], function(){
             Route::post('/category/store', 'store')->name('category.store');
             Route::put('/category/update/{id}', 'update')->name('category.update');
             Route::delete('/category/delete/{id}', 'destroy')->name('category.delete');
+            Route::get('/category/search', 'search')->name('category.search');
         });
 
         //Common Files
@@ -45,6 +46,7 @@ Route::group(['prefix' => 'admin'], function(){
             Route::get('/sub-category', 'index')->name('sub-category.list');
             Route::post('/sub-category/store', 'store')->name('sub-category.store');
             Route::put('/sub-category/update/{id}', 'update')->name('sub-category.update');
+            Route::delete('/sub-category/delete/{id}', 'delete')->name('sub-category.delete');
         });
 
     });

@@ -3,7 +3,7 @@
     $('#categoryForm').submit(function(event) {
         event.preventDefault();
         $.ajax({
-            url: '{{ route("category.store") }}',
+            url: '{{ route('category.store') }}',
             type: 'post',
             data: $(this).serializeArray(),
             dataType: 'json',
@@ -37,6 +37,7 @@
         });
     });
 
+
     //form validation
     $('#name').on('keyup', function() {
         $('#name').removeClass('is-invalid').siblings('p').removeClass(
@@ -61,6 +62,45 @@
                 }
             }
         })
+    });
+
+    //search
+    $('#search').on('keyup', function(e) {
+        e.preventDefault();
+        let search = $('#search').val();
+        // console.log(search);
+        $.ajax({
+            url: '{{ route('category.search') }}',
+            type: 'get',
+            data: {
+                search: search
+            },
+            success: function(res) {
+                $('.table').html(res);
+            }
+        });
+    });
+
+
+    //Yazra datatables
+    $(function() {
+        var table = $('#categoryTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('category.list') }}"
+            },
+            columns: [{
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'slug',
+                    name: 'slug'
+                }
+            ]
+
+        });
     });
 
     //image_upload
@@ -189,28 +229,58 @@
         });
     });
 
-    //delete confirmation
-    function deleteCategory(id) {
-        var url = '{{ route('category.delete', 'ID') }}';
-        var newUrl = url.replace("ID", id)
-
-        if (confirm("Are you sure to delete category ?")) {
-            $.ajax({
-                url: newUrl,
-                type: 'delete',
-                data: {},
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response["status"]) {
-                        window.location.href = "{{ route('category.list') }}";
-                    }
+    //delete blade
+    $('#confirm-delete').on('click', '.btn-ok', function(e) {
+        var $modalDiv = $(e.delegateTarget);
+        var id = $(this).data('recordId');
+        $.ajax({
+            url: '/admin/category/delete/' + id,
+            type: 'delete',
+            data: {},
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response["status"]) {
+                    window.location.href = "{{ route('category.list') }}";
                 }
-            });
-        }
-    }
+            }
+        });
+        $modalDiv.addClass('loading');
+        setTimeout(function() {
+            $modalDiv.modal('hide').removeClass('loading');
+        }, 1000)
+    });
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        var data = $(e.relatedTarget).data();
+        $('.title', this).text(data.recordTitle);
+        $('.btn-ok', this).data('recordId', data.recordId);
+    });
+
+    // //delete confirmation
+    // function deleteCategory(id) {
+    //     var url = '{{ route('category.delete', 'ID') }}';
+    //     var newUrl = url.replace("ID", id)
+
+    //     if (confirm(
+    //         "Are you sure to delete this category ? It will delete all Sub Category relate to this Category ! ")) {
+    //         $.ajax({
+    //             url: newUrl,
+    //             type: 'delete',
+    //             data: {},
+    //             dataType: 'json',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             },
+    //             success: function(response) {
+    //                 if (response["status"]) {
+    //                     window.location.href = "{{ route('category.list') }}";
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
 
     //image_upload
     Dropzone.autoDiscover = false;

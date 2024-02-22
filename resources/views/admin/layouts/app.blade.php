@@ -1,39 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-{{-- admin alert style --}}
-{{-- <style>
-    .colored-toast.swal2-icon-success {
-        background-color: #a5dc86 !important;
-    }
-
-    .colored-toast.swal2-icon-error {
-        background-color: #f27474 !important;
-    }
-
-    .colored-toast.swal2-icon-warning {
-        background-color: #f8bb86 !important;
-    }
-
-    .colored-toast.swal2-icon-info {
-        background-color: #3fc3ee !important;
-    }
-
-    .colored-toast.swal2-icon-question {
-        background-color: #87adbd !important;
-    }
-
-    .colored-toast .swal2-title {
-        color: white;
-    }
-
-    .colored-toast .swal2-close {
-        color: white;
-    }
-
-    .colored-toast .swal2-html-container {
-        color: white;
-    }
-</style> --}}
 
 <head>
     <meta charset="utf-8">
@@ -51,7 +17,8 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
     <script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 </head>
 

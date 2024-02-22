@@ -2,6 +2,7 @@
 
 @section('content')
     @include('admin.message')
+    @include('admin.delete')
     @include('admin.sub_category.add_modal')
     @include('admin.sub_category.edit')
     <section class="content-header">
@@ -28,8 +29,7 @@
                 <div class="card-header">
                     <div class="card-tools">
                         <div class="input-group input-group" style="width: 250px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
+                            <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-default">
                                     <i class="fas fa-search"></i>
@@ -84,8 +84,9 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <a href="javascript://" onclick="deleteCategory({{ $item->id }})"
-                                            class="text-danger w-4 h-4 mr-1 delCat">
+                                        <a href="javascript://" data-record-id="{{ $item->id }}"
+                                            data-record-title="{{ $item->name }}" data-toggle="modal"
+                                            data-target="#confirm-SubDelete" class="text-danger w-4 h-4 mr-1">
                                             <svg wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

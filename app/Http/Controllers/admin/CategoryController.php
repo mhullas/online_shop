@@ -11,13 +11,20 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Yajra\Datatables\Facades\Datatables;
+
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::latest()->paginate(10);
-        return view('admin.category.list', compact('categories'));
+        $data = Category::latest()->get();
+        if ($request->ajax()){
+            // return DataTables::of($data)->addIndexColumn()->make(true);
+            return Datatables::eloquent($data)->make(true);
+        }
+        // $categories = Category::latest()->paginate(10);
+        return view('admin.category.list');
     }
 
     public function create()
@@ -71,7 +78,7 @@ class CategoryController extends Controller
                     // File::delete($sPath);
                 }
             }
-            session()->flash('success', 'Category Added - flash !!');
+            session()->flash('success', 'Category Added !!');
             return response()->json([
                 'status' => true,
                 'message' => 'Category Added !!'
@@ -200,5 +207,21 @@ class CategoryController extends Controller
             'status' => true,
             'slug' => $slug
         ]);
+    }
+
+    public function search(Request $request){
+        $search = Category::where('name', 'like', '%'.$request->search. '%')
+        ->orWhere('slug','like', '%' .$request->search.'%')
+        ->orderBy('id', 'desc')
+        ->paginate(10);
+
+        if ($search->count() >= 1){
+            return view('admin.category.paginate', compact('search'));
+        }else{
+            return response()->json([
+                'status' => 'nothing_found',
+
+            ]);
+        }
     }
 }

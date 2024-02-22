@@ -106,4 +106,21 @@ class SubCategoryController extends Controller
             ]);
         }
     }
+
+    public function delete($id){
+        $subCategory = SubCategory::find($id);
+        if (empty($subCategory)){
+            session()->flash('error', 'Sub Category not found !!');
+            return response()->json([
+                'status' => false,
+                'message' => 'Sub Category not found.'
+            ]);
+        }
+        $subCategory->delete();
+        session()->flash('success', 'Sub Category Deleted !!');
+        return response()->json([
+            'status' => true,
+            'message' => 'Sub Category Deleted.'
+        ]);
+    }
 }

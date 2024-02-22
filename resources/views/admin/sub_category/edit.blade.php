@@ -11,7 +11,7 @@
             </div>
             <div class="modal-body">
                 <form action="" method="PUT" id="updateSubCategoryForm">
-                    <input type="text" id="updateId" name="updateId">
+                    <input type="hidden" id="updateId" name="updateId">
                     <div class="container-fluid">
                         <div class="card col-md-12">
                             <div class="card-body">

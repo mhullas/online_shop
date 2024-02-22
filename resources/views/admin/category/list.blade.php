@@ -2,6 +2,7 @@
 
 @section('content')
     @include('admin.message')
+    @include('admin.delete')
     @include('admin.category.add_category_modal')
     @include('admin.category.edit_category_modal')
     <section class="content-header">
@@ -28,7 +29,7 @@
                 <div class="card-header">
                     <div class="card-tools">
                         <div class="input-group input-group" style="width: 250px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                            <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
 
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-default">
@@ -39,22 +40,23 @@
                     </div>
                 </div>
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
+                    <table class="table table-hover text-nowrap" id="categoryTable">
                         <thead>
                             <tr>
-                                <th width="60">ID</th>
-                                <th>Image</th>
+                                {{-- <th width="160">ID</th> --}}
+                                {{-- <th>Image</th> --}}
                                 <th>Name</th>
                                 <th>Slug</th>
-                                <th width="100">Status</th>
-                                <th width="100">Action</th>
+                                {{-- <th width="100">Status</th> --}}
+                                {{-- <th width="100">Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($categories as $category)
+                            {{-- @foreach ($categories as $category)
                                 <tr>
                                     <td>1</td>
-                                    <td><img width="100px" src="{{ asset('Uploads/Category/thumb/' . $category->image) }}"></td>
+                                    <td><img width="100px" src="{{ asset('Uploads/Category/thumb/' . $category->image) }}">
+                                    </td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
                                     <td>
@@ -84,8 +86,10 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <a href="javascript://" onclick="deleteCategory({{ $category->id }})" class="text-danger w-4 h-4 mr-1 delCat">
-                                            <svg wire:loading.remove.delay="" wire:target=""
+                                        <a href="javascript://" data-record-id="{{ $category->id }}"
+                                            data-record-title="{{ $category->name }}" data-toggle="modal"
+                                            data-target="#confirm-delete" class="text-danger w-4 h-4 mr-1"> <svg
+                                                wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path ath fill-rule="evenodd"
@@ -95,15 +99,15 @@
                                         </a>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @endforeach --}}
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer clearfix">
+                {{-- <div class="card-footer clearfix">
                     <ul class="pagination pagination m-0 float-right">
                         {{ $categories->links() }}
                     </ul>
-                </div>
+                </div> --}}
             </div>
         </div>
         <!-- /.card -->
