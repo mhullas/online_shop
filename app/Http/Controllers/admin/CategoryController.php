@@ -11,20 +11,20 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Yajra\Datatables\Facades\Datatables;
-
+use App\DataTables\CategoryDataTable;
 
 class CategoryController extends Controller
 {
+    // public function index(CategoryDataTable $dataTable)
+    // {
+    //     return $dataTable->render('admin.category.list');
+    // }
     public function index(Request $request)
     {
-        $data = Category::latest()->get();
-        if ($request->ajax()){
-            // return DataTables::of($data)->addIndexColumn()->make(true);
-            return Datatables::eloquent($data)->make(true);
-        }
-        // $categories = Category::latest()->paginate(10);
-        return view('admin.category.list');
+        // return DataTables::of(Category::query())->make(true);
+
+        $categories = Category::latest()->get();
+        return view('admin.category.list', compact('categories'));
     }
 
     public function create()
@@ -209,15 +209,16 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function search(Request $request){
-        $search = Category::where('name', 'like', '%'.$request->search. '%')
-        ->orWhere('slug','like', '%' .$request->search.'%')
-        ->orderBy('id', 'desc')
-        ->paginate(10);
+    public function search(Request $request)
+    {
+        $search = Category::where('name', 'like', '%' . $request->search . '%')
+            ->orWhere('slug', 'like', '%' . $request->search . '%')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
 
-        if ($search->count() >= 1){
+        if ($search->count() >= 1) {
             return view('admin.category.paginate', compact('search'));
-        }else{
+        } else {
             return response()->json([
                 'status' => 'nothing_found',
 

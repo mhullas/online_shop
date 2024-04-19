@@ -1,4 +1,7 @@
 <script>
+    
+    new DataTable('#myTable');
+
     //form_submit
     $('#subCategoryForm').submit(function(event) {
         event.preventDefault();
@@ -217,24 +220,24 @@
     //     }
     // }
     //Delete Sub Category
-    function deleteSubCategory(id) {
-        var url = '{{ route('sub-category.delete', 'ID') }}';
-        var newUrl = url.replace("ID", id)
-        if (confirm('Are you sure to delete Sub Category ?')) {
-            $.ajax({
-                url: newUrl,
-                type: 'delete',
-                data: {},
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response["status"]) {
-                        window.location.href = "{{ route('sub-category.list') }}";
-                    }
-                }
-            });
-        }
-    }
+    // function deleteSubCategory(id) {
+    //     var url = '{{ route('sub-category.delete', 'ID') }}';
+    //     var newUrl = url.replace("ID", id)
+    //     if (confirm('Are you sure to delete Sub Category ?')) {
+    //         $.ajax({
+    //             url: newUrl,
+    //             type: 'delete',
+    //             data: {},
+    //             dataType: 'json',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             },
+    //             success: function(response) {
+    //                 if (response["status"]) {
+    //                     window.location.href = "{{ route('sub-category.list') }}";
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
 </script>

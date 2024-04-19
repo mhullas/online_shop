@@ -1,4 +1,7 @@
 <script>
+
+    new DataTable('#myTable');
+
     //form_submit
     $('#categoryForm').submit(function(event) {
         event.preventDefault();
@@ -48,7 +51,7 @@
     //Get Slug
     $('#name').on('keyup', function() {
         $.ajax({
-            url: '{{ route('getSlug') }}',
+            url: "{{ route('getSlug') }}",
             type: 'get',
             data: {
                 title: $(this).val()
@@ -70,7 +73,7 @@
         let search = $('#search').val();
         // console.log(search);
         $.ajax({
-            url: '{{ route('category.search') }}',
+            url: "{{ route('category.search') }}",
             type: 'get',
             data: {
                 search: search
@@ -78,28 +81,6 @@
             success: function(res) {
                 $('.table').html(res);
             }
-        });
-    });
-
-
-    //Yazra datatables
-    $(function() {
-        var table = $('#categoryTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('category.list') }}"
-            },
-            columns: [{
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'slug',
-                    name: 'slug'
-                }
-            ]
-
         });
     });
 

@@ -26,7 +26,7 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header">
+                {{-- <div class="card-header">
                     <div class="card-tools">
                         <div class="input-group input-group" style="width: 250px;">
                             <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search">
@@ -37,9 +37,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
+                </div> --}}
+                <div class="card-body table-responsive p-3">
+                    <table class="table table-hover text-nowrap text-center" id="myTable" >
                         <thead>
                             <tr>
                                 <th width="60">ID</th>
@@ -53,7 +53,7 @@
                         <tbody>
                             @foreach ($subCategory as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->categoryName }}</td>
                                     <td>{{ $item->slug }}</td>

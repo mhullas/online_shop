@@ -1,21 +1,18 @@
 @extends('admin.layouts.app')
+@include('admin.brands.add')
+@include('admin.brands.edit')
+@include('admin.delete')
 
 @section('content')
     @include('admin.message')
-    @include('admin.delete')
-    @include('admin.category.add_category_modal')
-    @include('admin.category.edit_category_modal')
     <section class="content-header">
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Categories</h1>
+                    <h1>Brands</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('category.create') }}" class="btn btn-primary">Add Category</a>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_category">
-                        Launch demo modal
-                    </button>
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add_brand">Add New Brand</a>
                 </div>
             </div>
         </div>
@@ -26,47 +23,25 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-
-                {{-- {{ $dataTable->table() }} --}}
-
-
-                {{-- <div class="card-header">
-                    <div class="card-tools">
-                        <div class="input-group input-group" style="width: 250px;">
-                            <input type="text" name="search" id="search" class="form-control float-right"
-                                placeholder="Search">
-
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="card-body table-responsive p-3">
                     <table class="table table-hover text-nowrap" id="myTable">
                         <thead>
                             <tr>
                                 <th width="60">ID</th>
-                                <th class="text-center">Image</th>
-                                <th>Name</th>
+                                <th class="text-center">Name</th>
                                 <th>Slug</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($categories as $category)
+                            @foreach ($brand as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td><img width="100px" src="{{ asset('Uploads/Category/thumb/' . $category->image) }}"
-                                            class="rounded mx-auto d-block">
-                                    </td>
-                                    <td>{{ $category->name }}</td>
-                                    <td>{{ $category->slug }}</td>
+                                    <td class="text-center">{{ $item->name }}</td>
+                                    <td>{{ $item->slug }}</td>
                                     <td>
-                                        @if ($category->status == 1)
+                                        @if ($item->status == 1)
                                             <svg class="text-success-500 h-6 w-6 text-success"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -84,7 +59,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="javascript://" class="edit_cat" data-id="{{ $category->id }}">
+                                        <a href="javascript://" class="edit_brand" data-id="{{ $item->id }}">
                                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path
@@ -92,10 +67,10 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <a href="javascript://" data-record-id="{{ $category->id }}"
-                                            data-record-title="{{ $category->name }}" data-toggle="modal"
-                                            data-target="#confirm-delete" class="text-danger w-4 h-4 mr-1"> <svg
-                                                wire:loading.remove.delay="" wire:target=""
+                                        <a href="javascript://" data-record-id="{{ $item->id }}"
+                                            data-record-title="{{ $item->name }}" data-toggle="modal"
+                                            data-target="#brand-delete" class="text-danger w-4 h-4 mr-1">
+                                            <svg wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path ath fill-rule="evenodd"
@@ -106,14 +81,8 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
                     </table>
                 </div>
-                {{-- <div class="card-footer clearfix">
-                    <ul class="pagination pagination m-0 float-right">
-                        {{ $categories->links() }}
-                    </ul>
-                </div> --}}
             </div>
         </div>
         <!-- /.card -->
@@ -121,5 +90,5 @@
 @endsection
 
 @section('customJs')
-    @include('admin.category.category_custom_js')
+    @include('admin.brands.custom_js')
 @endsection

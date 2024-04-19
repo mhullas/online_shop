@@ -5,6 +5,8 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
+use App\Http\Controllers\admin\BrandController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -49,5 +51,24 @@ Route::group(['prefix' => 'admin'], function(){
             Route::delete('/sub-category/delete/{id}', 'delete')->name('sub-category.delete');
         });
 
+        //brands
+        Route::controller(BrandController::class)->group(function(){
+            Route::get('/brand/add', 'create')->name('brand.create');
+            Route::get('/brand/list', 'list')->name('brand.list');
+            Route::post('/brand/store', 'store')->name('brand.store');
+            Route::get('/brand/edit/{id}', 'edit')->name('brand.edit');
+            Route::put('/brand/update/{id}', 'update')->name('brand.update');
+            Route::delete('/brand/delete/{id}', 'delete')->name('brand.delete');
+        });
+
+
     });
 });
+
+// Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
