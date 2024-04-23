@@ -83,6 +83,11 @@
                             @endforeach
                     </table>
                 </div>
+                <div class="card-footer clearfix">
+                    <ul class="pagination pagination m-0 float-right">
+                        {{ $brand->links() }}
+                    </ul>
+                </div>
             </div>
         </div>
         <!-- /.card -->

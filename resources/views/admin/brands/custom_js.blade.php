@@ -1,6 +1,12 @@
 <script>
     // new DataTable('#myTable');
 
+    $('#edit_brand').on('hidden.bs.modal', function() {
+        $('#name').removeClass('is-invalid').siblings('p').removeClass(
+            'invalid-feedback').html('');
+
+    });
+
     //Form_Submit
     $('#brandForm').submit(function(e) {
         e.preventDefault();
@@ -175,7 +181,9 @@
         $('.btn-ok', this).data('recordId', data.recordId);
     });
 
-    $('#edit_brand').on('hidden.bs.modal', function() {
-        $(this).find('#editBrandForm')[0].reset();
-    })
+    //Paginate
+    $('')
+
+
+
 </script>
