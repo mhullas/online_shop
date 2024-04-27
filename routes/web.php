@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\BrandController;
+use App\Http\Controllers\admin\ProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -59,12 +60,22 @@ Route::group(['prefix' => 'admin'], function(){
             Route::get('/brand/edit/{id}', 'edit')->name('brand.edit');
             Route::put('/brand/update/{id}', 'update')->name('brand.update');
             Route::delete('/brand/delete/{id}', 'delete')->name('brand.delete');
-            Route::delete('/brand/page/{id}', 'paginate')->name('brand.paginate');
+            Route::get('/brand/page', 'paginate')->name('brand.paginate');
         });
 
-
+        //Products
+        Route::controller(ProductController::class)->group(function(){
+            Route::get('/product/create', 'create')->name('product.create');
+        });
     });
 });
+
+
+
+
+
+
+
 
 // Auth::routes();
 

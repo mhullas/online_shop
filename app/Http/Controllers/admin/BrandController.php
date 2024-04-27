@@ -11,8 +11,16 @@ class BrandController extends Controller
 {
     public function list()
     {
-        $brand = Brand::paginate(5);
+        $brand = Brand::paginate(10);
         return view('admin.brands.list', compact('brand'));
+    }
+
+    public function paginate(Request $request)
+    {
+        if ($request->ajax()) {
+            $brand = Brand::paginate(10);
+            return view('admin.brands.paginate', compact('brand'))->render();
+        }
     }
 
     public function store(Request $request)
@@ -84,8 +92,7 @@ class BrandController extends Controller
                 'message' => 'Brand Updated.'
             ]);
             return redirect()->route('brand.list')->with('success', 'Brand Updated !!');
-
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
@@ -94,10 +101,11 @@ class BrandController extends Controller
     }
 
 
-    public function delete($id){
+    public function delete($id)
+    {
         $brand = Brand::find($id);
 
-        if (empty($brand)){
+        if (empty($brand)) {
             session()->flash('error', 'Brand not found !!');
             return response()->json([
                 'status' => false,

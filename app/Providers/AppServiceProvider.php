@@ -21,8 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Builder::useVite();
         Paginator::useBootstrap();
-        
+        Builder::useVite();        
     }
 }

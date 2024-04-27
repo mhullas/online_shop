@@ -1,6 +1,6 @@
 <script>
 
-    // new DataTable('#myTable');
+    new DataTable('#myTable');
 
     //form_submit
     $('#categoryForm').submit(function(event) {

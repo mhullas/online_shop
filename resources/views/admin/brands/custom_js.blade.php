@@ -182,8 +182,25 @@
     });
 
     //Paginate
-    $('')
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        let page = $(this).attr('href').split('page=')[1];
+        //console.log(page);
+        product(page)
+    });
 
-
-
+    function product(page) {
+        let _token = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: "{{ route('brand.paginate') }}",
+            method: 'get',
+            data: {
+                _token: _token,
+                page: page
+            },
+            success: function(data) {
+                $('.table-data').html(data);
+            }
+        });
+    }
 </script>
