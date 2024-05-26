@@ -69,14 +69,14 @@ class CategoryController extends Controller
                 $category->image = $newImgName;
                 $category->save();
 
-                //delete TempImage
-                $imgId = $category->image_id;
-                if (!empty($imgId)) {
-                    $tempImage = TempImage::find($imgId);
-                    $tempImage->delete();
-                    // $sPath = public_path() . '/temp_images/' . $tempImage->name;
-                    // File::delete($sPath);
-                }
+                // //delete TempImage
+                // $imgId = $category->image_id;
+                // if (!empty($imgId)) {
+                //     $tempImage = TempImage::find($imgId);
+                //     $tempImage->delete();
+                //     // $sPath = public_path() . '/temp_images/' . $tempImage->name;
+                //     // File::delete($sPath);
+                // }
             }
             session()->flash('success', 'Category Added !!');
             return response()->json([

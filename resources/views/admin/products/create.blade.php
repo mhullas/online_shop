@@ -36,7 +36,7 @@
                                         <div class="mb-3">
                                             <label for="slug">Slug</label>
                                             <input type="text" name="slug" id="slug" class="form-control"
-                                                placeholder="Slug">
+                                                placeholder="Slug" readonly>
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -59,6 +59,9 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row" id="productGallery">
+
                         </div>
                         <div class="card mb-3">
                             <div class="card-body">
@@ -217,7 +220,7 @@
                     $('#sub_category').find('option').not(':first').remove();
                     $.each(response['subCategory'], function(key, item) {
                         $('#sub_category').append(
-                            `<option ='${item.id}'>${item.name}</option>`);
+                            `<option value='${item.id}'>${item.name}</option>`);
                     });
                 },
                 error: function() {
@@ -227,10 +230,7 @@
         });
 
 
-        $(document).on("keypress", "input[type='text']", function(e) {
-            $(this).removeClass('is-invalid');
-        });
-        $(document).on("keypress", "input[type='number']", function(e) {
+        $(document).on("keypress", "input[type='text'], input[type='number']", function(e) {
             $(this).removeClass('is-invalid');
         });
         $(document).on("change", "select", function(e) {
@@ -238,6 +238,25 @@
         });
 
 
+
+        //get slug
+        $('#title').on('keyup', function() {
+            $.ajax({
+                url: "{{ route('getSlug') }}",
+                type: 'get',
+                data: {
+                    title: $(this).val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response['status'] == true) {
+                        $('#slug').val(response['slug']);
+                        $('#slug').removeClass('is-invalid').siblings('p').removeClass(
+                            'invalid-feedback').html('');
+                    }
+                }
+            });
+        });
 
         $('#productForm').submit(function(e) {
             e.preventDefault();
@@ -249,6 +268,7 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response['status'] == true) {
+
 
                     } else {
                         let errors = response['error'];
@@ -264,5 +284,34 @@
                 }
             });
         });
+
+        //image_upload
+        Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
+            url: "{{ route('temp-images.create') }}",
+            maxFiles: 10,
+            paramName: 'image',
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(file, response) {
+                //$("#image_id").val(response.image_id);
+                //console.log(response)
+
+               var html = `<div class="col-md-3"><div class="card">
+               <input type="hidden" name="image_array[]" value="${response.image_id}">
+                <img src="${response.imagePath}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <a href="#" class="btn btn-danger">Delete</a>
+                    </div>
+                </div></div>`;
+
+                $("#productGallery").append(html);
+            }
+        });
+        
     </script>
+    
 @endsection
