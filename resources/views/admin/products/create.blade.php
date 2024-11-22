@@ -157,10 +157,9 @@
                                     <p class="error"></p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="category">Sub category</label>
+                                    <label for="sub_category">Sub category</label>
                                     <select name="sub_category" id="sub_category" class="form-control">
                                         <option value="">Select a Sub Category</option>
-
                                     </select>
                                 </div>
                             </div>
@@ -260,6 +259,7 @@
 
         $('#productForm').submit(function(e) {
             e.preventDefault();
+            $("button[type='submit']").prop('disabled', true);
 
             $.ajax({
                 url: "{{ route('product.store') }}",
@@ -267,9 +267,11 @@
                 data: $(this).serializeArray(),
                 dataType: 'json',
                 success: function(response) {
+                    $("button[type='submit']").prop('disabled', false);
                     if (response['status'] == true) {
-
-
+                        $('.error').removeClass('invalid-feedback').html('');
+                        $("input[type='text'], select").removeClass('is-invalid');
+                        window.location.href = "{{ route('product.list') }}";
                     } else {
                         let errors = response['error'];
 
@@ -297,10 +299,10 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(file, response) {
-                //$("#image_id").val(response.image_id);
-                //console.log(response)
+                $("#image_id").val(response.image_id);
+                console.log(response)
 
-               var html = `<div class="col-md-3"><div class="card">
+                var html = `<div class="col-md-3"><div class="card">
                <input type="hidden" name="image_array[]" value="${response.image_id}">
                 <img src="${response.imagePath}" class="card-img-top" alt="...">
                     <div class="card-body">
@@ -311,7 +313,5 @@
                 $("#productGallery").append(html);
             }
         });
-        
     </script>
-    
 @endsection

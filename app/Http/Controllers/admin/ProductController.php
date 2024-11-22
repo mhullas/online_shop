@@ -10,12 +10,19 @@ use App\Models\ProductImage;
 use App\Models\SubCategory;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductController extends Controller
 {
+
+    public function list(){
+        echo "Ullas";
+        echo "<h1 style='color:red'>Product List</h1>";
+    }
+
     public function create()
     {
         $data = [];
@@ -62,7 +69,7 @@ class ProductController extends Controller
         }
 
         $validator = Validator::make($request->all(), $rules);
-        if ($validator->passes()){
+        if ($validator->passes()) {
 
             $product = new Product();
             $product->title = $request->title;
@@ -82,11 +89,13 @@ class ProductController extends Controller
             $product->save();
 
             // Save Galleries
-            if (!empty($request->image_array)){
-                foreach($request->image_array as $temp_img_id){
+            // $ullas = $request->image_array;
+            // dd($ullas);
+            if (!empty($request->image_array)) {
+                foreach ($request->image_array as $temp_img_id) {
 
                     $temp_img_info = TempImage::find($temp_img_id);
-                    $textArray = explode('.',$temp_img_info->name);
+                    $textArray = explode('.', $temp_img_info->name);
                     $ext = last($textArray);
 
                     $productImage = new ProductImage();
@@ -94,37 +103,33 @@ class ProductController extends Controller
                     $productImage->image = 'NULL';
                     $productImage->save();
 
-                    $product_img_name = $product->id.'-'.$productImage->id.'-'.time().'.'.$ext;
+                    $product_img_name = $product->id . '-' . $productImage->id . '-' . time() . '.' . $ext;
                     $productImage->image = $product_img_name;
                     $productImage->save();
 
                     //product thumbnails
-					
-					//Large Image
-                    $spath = public_path().'/temp/'.$temp_img_info->name;
-                    $dpath = public_path().'/Uploads/Product/Large/'.$temp_img_info->name;
+                    //Large Image
+                    $spath = public_path() . '/temp_images/' . $temp_img_info->name;
+                    $dpath = public_path() . '/Uploads/Product/Large/' . $temp_img_info->name;
                     $manager = new ImageManager(new Driver());
                     $image = $manager->read($spath);
-                    $image->resize(1400, null);
+                    $image = $image->scale(height: 300);
                     $image->save($dpath);
-					
-					//Small Image
-                    $dpath = public_path().'/Uploads/Product/Small/'.$temp_img_info->name;
+
+                    //Small Image
+                    $dpath = public_path() . '/Uploads/Product/Small/' . $temp_img_info->name;
                     $image = $manager->read($spath);
                     $image->coverDown(300, 300);
                     $image->save($dpath);
-                    
-                    
                 }
             }
-            
+
             // session()->flash('success', 'Product Added !!');
             return response()->json([
                 'status' => true,
                 'message' => 'Product Added.'
             ]);
-
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'error' => $validator->errors()

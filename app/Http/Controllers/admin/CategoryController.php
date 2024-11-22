@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
-//use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Drivers\Gd\Driver;
 use App\DataTables\CategoryDataTable;
 
 
@@ -59,12 +59,13 @@ class CategoryController extends Controller
                 $newImgName = $category->id . '.' . $ext;
 
                 //copy or move
-                $sPath = public_path().'/temp_images/'. $imgFind->name;
-                $dPath = public_path().'/Uploads/Category/'.$newImgName;
-                $manager = ImageManager::imagick()->read($sPath);
-                $int_img = $manager->resize(560, 400);
-                $int_img->toJpeg(300)->save(public_path() . '/Uploads/Category/thumb/' . $newImgName);
-                File::move($sPath, $dPath);
+                $sPath = public_path() . '/temp_images/' . $imgFind->name;
+                $dPath = public_path() . '/Uploads/Category/' . $newImgName;
+
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($sPath);
+                $image = $image->resize(560, 400);
+                $image->toJpeg(300)->save(public_path() . '/Uploads/Category/thumb/' . $newImgName);
 
                 $category->image = $newImgName;
                 $category->save();
@@ -139,9 +140,10 @@ class CategoryController extends Controller
                 //copy or move
                 $sPath = public_path() . '/temp_images/' . $imgFind->name;
                 $dPath = public_path() . '/Uploads/Category/' . $newImgName;
-                $manager = ImageManager::imagick()->read($sPath);
-                $int_img = $manager->resize(560, 400);
-                $int_img->toJpeg(300)->save(public_path() . '/Uploads/Category/thumb/' . $newImgName);
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($sPath);
+                $image = $image->resize(560, 400);
+                $image->toJpeg(300)->save(public_path() . '/Uploads/Category/thumb/' . $newImgName);
                 File::move($sPath, $dPath);
 
                 $category->image = $newImgName;
@@ -173,7 +175,6 @@ class CategoryController extends Controller
 
     public function destroy($id, Request $request)
     {
-
         $category = Category::find($id);
         if (empty($category)) {
             session()->flash('error', 'Category not Found !!');
@@ -181,19 +182,24 @@ class CategoryController extends Controller
                 'status' => true,
                 'message' => 'Category not Found.'
             ]);
+        }elseif ($category && $category->subcategories()->count() == 0) {
+            $category->delete();
+            $sPath = public_path() . '/Uploads/Category/thumb/' . $category->image;
+            $dPath = public_path() . '/Uploads/Category/' . $category->image;
+            File::delete($sPath, $dPath);
+            session()->flash('success', 'Category Deleted !!');
+            return response()->json([
+                'status' => true,
+                'message' => 'Category Deleted.',
+                'getCategory' => $category
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Category has Sub-Categories.',
+                'getCategory' => $category
+            ]);
         }
-        $category->delete();
-
-        $sPath = public_path() . '/Uploads/Category/thumb/' . $category->image;
-        $dPath = public_path() . '/Uploads/Category/' . $category->image;
-
-        File::delete($sPath, $dPath);
-
-        session()->flash('success', 'Category Deleted !!');
-        return response()->json([
-            'status' => true,
-            'message' => 'Category Deleted.'
-        ]);
     }
 
     public function getSlug(Request $request)
@@ -220,7 +226,6 @@ class CategoryController extends Controller
         } else {
             return response()->json([
                 'status' => 'nothing_found',
-
             ]);
         }
     }

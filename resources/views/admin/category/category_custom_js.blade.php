@@ -1,5 +1,4 @@
 <script>
-
     new DataTable('#myTable');
 
     //form_submit
@@ -211,9 +210,9 @@
     });
 
     //delete blade
-    $('#confirm-delete').on('click', '.btn-ok', function(e) {
+    $('#category_delete').on('click', '.btn_ok', function(e) {
         var $modalDiv = $(e.delegateTarget);
-        var id = $(this).data('recordId');
+        var id = $(this).data('id');
         $.ajax({
             url: '/admin/category/delete/' + id,
             type: 'delete',
@@ -223,7 +222,15 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                if (response["status"]) {
+                if ((response["status"] == false)) {
+                    $('#confirm_category .title').text(response.getCategory.name);
+                    $('#confirm_category').modal('show');
+                    $('#confirm_category').on('click', '.category_ok',
+                        function() {
+                            $('#confirm_category').modal('hide');
+                        });
+                }
+                if (response["status"] == true) {
                     window.location.href = "{{ route('category.list') }}";
                 }
             }
@@ -231,13 +238,15 @@
         $modalDiv.addClass('loading');
         setTimeout(function() {
             $modalDiv.modal('hide').removeClass('loading');
-        }, 1000)
+        }, 300)
     });
-    $('#confirm-delete').on('show.bs.modal', function(e) {
+    $('#category_delete').on('show.bs.modal', function(e) {
         var data = $(e.relatedTarget).data();
+        console.log(data);
         $('.title', this).text(data.recordTitle);
-        $('.btn-ok', this).data('recordId', data.recordId);
+        $('.btn_ok', this).data('id', data.recordId);
     });
+
 
     // //delete confirmation
     // function deleteCategory(id) {

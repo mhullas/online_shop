@@ -1,5 +1,5 @@
 @if (Session::has('error'))
-    <div class="alert alert-danger alert-dismissible">
+    <div class="alert alert-danger alert-dismissible centered-content" style="text-align: center;">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         <h5><i class="icon fas fa-ban"></i> Error!</h5>
         {{ Session::get('error') }}
@@ -7,7 +7,7 @@
 @endif
 
 @if (Session::has('success'))
-    <div class="alert alert-success alert-dismissible">
+    <div  class="centered-content alert alert-success alert-dismissible" style="text-align: center;">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         <h5><i class="icon fas fa-ban"></i> Success!</h5>
         {{ Session::get('success') }}
