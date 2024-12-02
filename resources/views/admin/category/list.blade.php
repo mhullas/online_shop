@@ -56,7 +56,7 @@
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
@@ -107,7 +107,7 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
                 {{-- <div class="card-footer clearfix">
@@ -122,5 +122,64 @@
 @endsection
 
 @section('customJs')
+    <script>
+        $('#myTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('category.getCategories') }}',
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                }, // Numbering column
+                {
+                    data: 'image',
+                    name: 'image',
+                    render: function(data) {
+                        return `<img src="/Uploads/Category/thumb/${data}" alt="Image" width="50">`;
+                    },
+                     className: 'text-center'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'slug',
+                    name: 'slug'
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    render: function(data) {
+                        if (data == 1) {
+                            return `<svg class="text-success-500 h-6 w-6 text-success"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>`;
+                        } else {
+                            return `<svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                            aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>`;
+                        }
+                    },
+                },
+
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+    </script>
     @include('admin.category.category_custom_js')
 @endsection

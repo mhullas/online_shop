@@ -1,5 +1,5 @@
 <script>
-    new DataTable('#myTable');
+    // new DataTable('#myTable');
 
     //form_submit
     $('#categoryForm').submit(function(event) {
@@ -144,6 +144,7 @@
             url: '/admin/category/edit/' + cat_id,
             success: function(response) {
                 // console.log(response.getCategory.name);
+                $('#up_imageId').val(response.getCategory.image_id);
                 $('#up_name').val(response.getCategory.name);
                 $('#up_slug').val(response.getCategory.slug);
                 $('#showimg').prop('src', '/Uploads/Category/thumb/' + response.getCategory.image);

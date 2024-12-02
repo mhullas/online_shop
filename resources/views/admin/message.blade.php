@@ -7,10 +7,9 @@
 @endif
 
 @if (Session::has('success'))
-    <div  class="centered-content alert alert-success alert-dismissible" style="text-align: center;">
+    <div class="centered-content alert alert-success alert-dismissible" style="text-align: center;">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h5><i class="icon fas fa-ban"></i> Success!</h5>
-        {{ Session::get('success') }}
+        <h5><i class="icon fas fa-ban"></i>{{ Session::get('success') }}</h5>
     </div>
 @endif
 

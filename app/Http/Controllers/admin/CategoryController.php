@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use App\DataTables\CategoryDataTable;
-
+use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
@@ -22,10 +21,46 @@ class CategoryController extends Controller
     // }
     public function index(Request $request)
     {
+
+        return view('admin.category.list');
         // return DataTables::of(Category::query())->make(true);
 
+        // $categories = Category::latest()->get();
+        // return DataTables::of($categories)->toJson();
+
+
+        // return DataTables::of($categories);
+        // return view('admin.category.list', compact('categories'));
+    }
+
+    public function getCategories()
+    {
         $categories = Category::latest()->get();
-        return view('admin.category.list', compact('categories'));
+        return DataTables::of($categories)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                return '<a href="javascript://" class="edit_cat" data-id="' . $row->id . '">
+                                            <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path
+                                                    d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                </path>
+                                            </svg>
+                                        </a><a href="javascript://" data-record-id="' . $row->id . '"
+                                            data-record-title="' . $row->name . '" data-toggle="modal"
+                                            data-target="#category_delete" class="text-danger w-4 h-4 mr-1">
+                                            <svg wire:loading.remove.delay="" wire:target=""
+                                                class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path ath fill-rule="evenodd"
+                                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                    clip-rule="evenodd">
+                                                </path>
+                                            </svg>
+                                        </a>';
+            })
+            ->rawColumns(['action']) // Ensures HTML is rendered in the action column
+            ->make(true);
     }
 
     public function create()
@@ -182,7 +217,7 @@ class CategoryController extends Controller
                 'status' => true,
                 'message' => 'Category not Found.'
             ]);
-        }elseif ($category && $category->subcategories()->count() == 0) {
+        } elseif ($category && $category->subcategories()->count() == 0) {
             $category->delete();
             $sPath = public_path() . '/Uploads/Category/thumb/' . $category->image;
             $dPath = public_path() . '/Uploads/Category/' . $category->image;

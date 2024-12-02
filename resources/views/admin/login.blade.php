@@ -51,8 +51,8 @@
 </head>
 
 <body class="hold-transition login-page">
-    @include('admin.message')
     <div class="login-box">
+        @include('admin.message')
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
