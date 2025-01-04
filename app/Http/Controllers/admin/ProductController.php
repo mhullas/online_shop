@@ -17,9 +17,15 @@ use Intervention\Image\Drivers\Gd\Driver;
 class ProductController extends Controller
 {
 
-    public function list(){
-        echo "Ullas";
-        echo "<h1 style='color:red'>Product List</h1>";
+    public function list(Request $request)
+    {
+        $products = Product::latest()->with('product_images');
+        if ($request->get('keyword') != "") {
+            $products = $products->where('title', 'like', '%' . $request->keyword . '%');
+        }
+        $products = $products->paginate();
+        $data['products'] = $products;
+        return view('admin.products.list', $data);
     }
 
     public function create()
@@ -109,21 +115,21 @@ class ProductController extends Controller
                     //product thumbnails
                     //Large Image
                     $spath = public_path() . '/temp_images/' . $temp_img_info->name;
-                    $dpath = public_path() . '/Uploads/Product/Large/' . $temp_img_info->name;
+                    $dpath = public_path() . '/Uploads/Product/Large/' . $product_img_name;
                     $manager = new ImageManager(new Driver());
                     $image = $manager->read($spath);
                     $image = $image->scale(height: 300);
                     $image->save($dpath);
 
                     //Small Image
-                    $dpath = public_path() . '/Uploads/Product/Small/' . $temp_img_info->name;
+                    $dpath = public_path() . '/Uploads/Product/Small/' . $product_img_name;
                     $image = $manager->read($spath);
                     $image->coverDown(300, 300);
                     $image->save($dpath);
                 }
             }
 
-            // session()->flash('success', 'Product Added !!');
+            session()->flash('success', 'Product Added !!');
             return response()->json([
                 'status' => true,
                 'message' => 'Product Added.'
@@ -135,8 +141,21 @@ class ProductController extends Controller
             ]);
         }
     }
+
+    public function edit($id)
+    {
+        $data = [];
+        $products = Product::find($id);
+        $categories = Category::orderBy('name', 'ASC')->get();
+        $subCategories = SubCategory::where('category_id', $products->category_id)->get();
+        $brands = Brand::orderBy('name', 'ASC')->get();
+        $data['products'] = $products;
+        $data['categories'] = $categories;
+        $data['subCategories'] = $subCategories;
+        $data['brands'] = $brands;
+
+        return view('admin.products.edit', $data);
+    }
 }
-
-
 
 // comment for testing 

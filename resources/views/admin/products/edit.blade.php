@@ -5,7 +5,7 @@
         <div class="container-fluid my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Create Product</h1>
+                    <h1>Edit Product</h1>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('product.list') }}" class="btn btn-primary">Back</a>
@@ -28,7 +28,7 @@
                                         <div class="mb-3">
                                             <label for="title">Title</label>
                                             <input type="text" name="title" id="title" class="form-control"
-                                                placeholder="Title">
+                                                placeholder="Title" value="{{ $products->title }}">
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -36,7 +36,7 @@
                                         <div class="mb-3">
                                             <label for="slug">Slug</label>
                                             <input type="text" name="slug" id="slug" class="form-control"
-                                                placeholder="Slug" readonly>
+                                                placeholder="Slug" value="{{ $products->slug }}" readonly>
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -44,7 +44,7 @@
                                         <div class="mb-3">
                                             <label for="description">Description</label>
                                             <textarea name="description" id="description" cols="30" rows="10" class="summernote"
-                                                placeholder="Description"></textarea>
+                                                placeholder="Description">{{ $products->description }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                         <div class="mb-3">
                                             <label for="price">Price</label>
                                             <input type="text" name="price" id="price" class="form-control"
-                                                placeholder="Price">
+                                                placeholder="Price" value="{{ $products->price }}">
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -79,7 +79,8 @@
                                         <div class="mb-3">
                                             <label for="compare_price">Compare at Price</label>
                                             <input type="text" name="compare_price" id="compare_price"
-                                                class="form-control" placeholder="Compare Price">
+                                                class="form-control" placeholder="Compare Price"
+                                                value="{{ $products->compare_price }}">
                                             <p class="text-muted mt-3">
                                                 To show a reduced price, move the product’s original price into Compare at
                                                 price. Enter a lower value into Price.
@@ -97,7 +98,7 @@
                                         <div class="mb-3">
                                             <label for="sku">SKU (Stock Keeping Unit)</label>
                                             <input type="text" name="sku" id="sku" class="form-control"
-                                                placeholder="sku">
+                                                placeholder="sku" value="{{ $products->sku }}">
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -105,7 +106,7 @@
                                         <div class="mb-3">
                                             <label for="barcode">Barcode</label>
                                             <input type="text" name="barcode" id="barcode" class="form-control"
-                                                placeholder="Barcode">
+                                                placeholder="Barcode" value="{{ $products->barcode }}">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -113,13 +114,13 @@
                                             <div class="custom-control custom-checkbox">
                                                 <input type="hidden" name="track_qty" value="No">
                                                 <input class="custom-control-input" type="checkbox" id="track_qty"
-                                                    name="track_qty" value="Yes" checked>
+                                                    name="track_qty" value="Yes" {{ ($products->track_qty == 'Yes' ? 'checked':'') }}>
                                                 <label for="track_qty" class="custom-control-label">Track Quantity</label>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <input type="number" min="0" name="qty" id="qty"
-                                                class="form-control" placeholder="Qty">
+                                                class="form-control" placeholder="Qty" value="{{ $products->qty }}">
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -133,8 +134,10 @@
                                 <h2 class="h4 mb-3">Product status</h2>
                                 <div class="mb-3">
                                     <select name="status" id="status" class="form-control">
-                                        <option value="1">Active</option>
-                                        <option value="0">Block</option>
+                                        <option {{ $products->status == 1 ? 'selected' : '' }} value="1">Active
+                                        </option>
+                                        <option {{ $products->status == 0 ? 'selected' : '' }} value="0">Block
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -147,9 +150,10 @@
                                     <select name="category" id="category" class="form-control">
                                         <option value="">Select a category</option>
 
-                                        @if ($category->isNotEmpty())
-                                            @foreach ($category as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @if ($categories->isNotEmpty())
+                                            @foreach ($categories as $category)
+                                                <option {{ $products->category_id == $category->id ? 'selected' : '' }}
+                                                    value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         @endif
 
@@ -160,6 +164,13 @@
                                     <label for="sub_category">Sub category</label>
                                     <select name="sub_category" id="sub_category" class="form-control">
                                         <option value="">Select a Sub Category</option>
+                                        @if ($subCategories->isNotEmpty())
+                                            @foreach ($subCategories as $subCategory)
+                                                <option
+                                                    {{ $products->sub_category_id == $subCategory->id ? 'selected' : '' }}
+                                                    value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -170,9 +181,9 @@
                                 <div class="mb-3">
                                     <select name="brand" id="brand" class="form-control">
                                         <option value="">Select a brand</option>
-                                        @if ($brand->isNotEmpty())
-                                            @foreach ($brand as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @if ($brands->isNotEmpty())
+                                            @foreach ($brands as $brand)
+                                                <option {{ $products->brand_id == $brand->id ? 'selected':'' }} value="{{ $brand->id }}">{{ $brand->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -184,8 +195,10 @@
                                 <h2 class="h4 mb-3">Featured product</h2>
                                 <div class="mb-3">
                                     <select name="is_featured" id="is_featured" class="form-control">
-                                        <option value="No">No</option>
-                                        <option value="Yes">Yes</option>
+                                        <option {{ $products->is_featured == 'No' ? 'selected' : '' }} value="No">No
+                                        </option>
+                                        <option {{ $products->is_featured == 'Yes' ? 'selected' : '' }} value="Yes">Yes
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -312,73 +325,13 @@
 
                 $("#productGallery").append(html);
             },
-            complete: function(file){
+            complete: function(file) {
                 this.removeFile(file);
             }
         });
 
-        function deleteImage(id){
-            $("#image-row-"+id).remove();
+        function deleteImage(id) {
+            $("#image-row-" + id).remove();
         }
-
-        // //image_delete
-        // Dropzone.autoDiscover = false;
-        // const mydropzone = $("#image").dropzone({
-        //     init: function() {
-        //         this.on("removedfile", function(file) {
-        //             // ইমেজের ID সংগ্রহ করুন (যদি প্রয়োজন হয়)
-        //             let imageId = file.imageId;
-
-        //             if (imageId) {
-        //                 // AJAX ডিলিট রিকুয়েস্ট
-        //                 fetch(`/image-remove/${imageId}`, {
-        //                         method: 'DELETE',
-        //                         headers: {
-        //                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-        //                                 .getAttribute('content'),
-        //                         },
-        //                     })
-        //                     .then(response => response.json())
-        //                     .then(data => {
-        //                         if (data.error) {
-        //                             alert(data.error);
-        //                         } else {
-        //                             console.log(data.success);
-        //                         }
-        //                     })
-        //                     .catch(error => console.error('Error:', error));
-        //             }
-        //         });
-        // });
-        
-        // Dropzone.options.myDropzone = {
-        //     // Dropzone এর অন্যান্য অপশন
-        //     init: function() {
-        //         this.on("removedfile", function(file) {
-        //             // ইমেজের ID সংগ্রহ করুন (যদি প্রয়োজন হয়)
-        //             let imageId = file.imageId;
-
-        //             if (imageId) {
-        //                 // AJAX ডিলিট রিকুয়েস্ট
-        //                 fetch(`/image-remove/${imageId}`, {
-        //                         method: 'DELETE',
-        //                         headers: {
-        //                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-        //                                 .getAttribute('content'),
-        //                         },
-        //                     })
-        //                     .then(response => response.json())
-        //                     .then(data => {
-        //                         if (data.error) {
-        //                             alert(data.error);
-        //                         } else {
-        //                             console.log(data.success);
-        //                         }
-        //                     })
-        //                     .catch(error => console.error('Error:', error));
-        //             }
-        //         });
-        //     }
-        // };
     </script>
 @endsection

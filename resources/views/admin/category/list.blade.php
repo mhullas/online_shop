@@ -26,10 +26,6 @@
         <!-- Default box -->
         <div class="container-fluid">
             <div class="card">
-
-                {{-- {{ $dataTable->table() }} --}}
-
-
                 {{-- <div class="card-header">
                     <div class="card-tools">
                         <div class="input-group input-group" style="width: 250px;">

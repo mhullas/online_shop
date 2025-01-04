@@ -94,10 +94,10 @@ class SubCategoryController extends Controller
             $subCategory->status = $request->up_status;
             $subCategory->save();
 
-            session()->flash('success', 'Sub Category Added !!');
+            session()->flash('success', 'Sub Category Updated !!');
             return response([
                 'status' => true,
-                'message' => 'Sub Category Added.'
+                'message' => 'Sub Category Updated.'
             ]);
         } else {
             return response([

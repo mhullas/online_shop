@@ -23,13 +23,8 @@ class CategoryController extends Controller
     {
 
         return view('admin.category.list');
-        // return DataTables::of(Category::query())->make(true);
 
         // $categories = Category::latest()->get();
-        // return DataTables::of($categories)->toJson();
-
-
-        // return DataTables::of($categories);
         // return view('admin.category.list', compact('categories'));
     }
 
@@ -38,16 +33,17 @@ class CategoryController extends Controller
         $categories = Category::latest()->get();
         return DataTables::of($categories)
             ->addIndexColumn()
-            ->addColumn('action', function ($row) {
-                return '<a href="javascript://" class="edit_cat" data-id="' . $row->id . '">
+            ->addColumn('action', function ($data) {
+                $btn =  '<a href="javascript://" class="edit_cat" data-id="' . $data->id . '">
                                             <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path
                                                     d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
                                                 </path>
                                             </svg>
-                                        </a><a href="javascript://" data-record-id="' . $row->id . '"
-                                            data-record-title="' . $row->name . '" data-toggle="modal"
+                                        </a>';
+                $btn .= '<a href="javascript://" data-record-id="' . $data->id . '"
+                                            data-record-title="' . $data->name . '" data-toggle="modal"
                                             data-target="#category_delete" class="text-danger w-4 h-4 mr-1">
                                             <svg wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +54,7 @@ class CategoryController extends Controller
                                                 </path>
                                             </svg>
                                         </a>';
+                return $btn;
             })
             ->rawColumns(['action']) // Ensures HTML is rendered in the action column
             ->make(true);
@@ -95,8 +92,6 @@ class CategoryController extends Controller
 
                 //copy or move
                 $sPath = public_path() . '/temp_images/' . $imgFind->name;
-                $dPath = public_path() . '/Uploads/Category/' . $newImgName;
-
                 $manager = new ImageManager(new Driver());
                 $image = $manager->read($sPath);
                 $image = $image->resize(560, 400);
@@ -174,12 +169,10 @@ class CategoryController extends Controller
 
                 //copy or move
                 $sPath = public_path() . '/temp_images/' . $imgFind->name;
-                $dPath = public_path() . '/Uploads/Category/' . $newImgName;
                 $manager = new ImageManager(new Driver());
                 $image = $manager->read($sPath);
                 $image = $image->resize(560, 400);
                 $image->toJpeg(300)->save(public_path() . '/Uploads/Category/thumb/' . $newImgName);
-                File::move($sPath, $dPath);
 
                 $category->image = $newImgName;
                 $category->save();

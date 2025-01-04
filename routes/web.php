@@ -70,6 +70,8 @@ Route::group(['prefix' => 'admin'], function(){
             Route::get('/product/create', 'create')->name('product.create');
             Route::get('/product-subcategory', 'getSubCategory')->name('product-subcategory.getSubCategory');
             Route::post('/product/store', 'store')->name('product.store');
+            Route::get('/product/edit/{id}', 'edit')->name('product.edit');
+
         });
     });
 });
