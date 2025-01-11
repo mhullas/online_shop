@@ -10,34 +10,30 @@ use Intervention\Image\ImageManager;
 
 class TempImageController extends Controller
 {
-    public function tempImage(Request $request){
+    public function tempImage(Request $request)
+    {
         $image = $request->image;
+        $ext = $image->getClientOriginalExtension();
+        $newName = time() . '_' . uniqid() . '.' . $ext;
 
-        if (!empty($image)){
-            $ext = $image->getClientOriginalExtension();
-            $newName = time().'.'.$ext;
-            
-            $tempImage = new TempImage();
-            $tempImage->name = $newName;
-            $tempImage->save();
-            $image->move(public_path().'/temp_images', $newName);
+        $tempImage = new TempImage();
+        $tempImage->name = $newName;
+        $tempImage->save();
 
-            //Generate thumbnail
-            $sourcePath = public_path().'/temp_images/'.$newName;
-            $destPath = public_path().'/temp_images/thumb/'.$newName;
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read($sourcePath);
-            $image = $image->scale(300, 250);
-            $image->save($destPath);
+        //Generate thumbnail
+        $sourcePath = $image->getPathName();
+        $destPath = public_path() . '/temp_images/thumb/' . $newName;
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($sourcePath);
+        $image = $image->scale(300, 250);
+        $image->save($destPath);
 
 
-            return response()->json([
-                'status' => true,
-                'image_id' => $tempImage->id,
-                'imagePath' => asset('/temp_images/thumb/'.$newName),
-                'message' => 'Image Uploaded Successfully.'
-            ]);
-            
-        }
+        return response()->json([
+            'status' => true,
+            'image_id' => $tempImage->id,
+            'imagePath' => asset('/temp_images/thumb/' . $newName),
+            'message' => 'Image Uploaded Successfully.'
+        ]);
     }
 }

@@ -91,7 +91,7 @@ class CategoryController extends Controller
                 $newImgName = $category->id . '.' . $ext;
 
                 //copy or move
-                $sPath = public_path() . '/temp_images/' . $imgFind->name;
+                $sPath = public_path() . '/temp_images/thumb/' . $imgFind->name;
                 $manager = new ImageManager(new Driver());
                 $image = $manager->read($sPath);
                 $image = $image->resize(560, 400);
@@ -100,14 +100,14 @@ class CategoryController extends Controller
                 $category->image = $newImgName;
                 $category->save();
 
-                // //delete TempImage
-                // $imgId = $category->image_id;
-                // if (!empty($imgId)) {
-                //     $tempImage = TempImage::find($imgId);
-                //     $tempImage->delete();
-                //     // $sPath = public_path() . '/temp_images/' . $tempImage->name;
-                //     // File::delete($sPath);
-                // }
+                //delete TempImage
+                $imgId = $category->image_id;
+                if (!empty($imgId)) {
+                    $tempImage = TempImage::find($imgId);
+                    $tempImage->delete();
+                    $sPath = public_path() . '/temp_images/thumb/' . $tempImage->name;
+                    File::delete($sPath);
+                }
             }
             session()->flash('success', 'Category Added !!');
             return response()->json([
@@ -168,7 +168,7 @@ class CategoryController extends Controller
                 $newImgName = $category->id . '.' . $ext;
 
                 //copy or move
-                $sPath = public_path() . '/temp_images/' . $imgFind->name;
+                $sPath = public_path() . '/temp_images/thumb/' . $imgFind->name;
                 $manager = new ImageManager(new Driver());
                 $image = $manager->read($sPath);
                 $image = $image->resize(560, 400);
@@ -177,14 +177,14 @@ class CategoryController extends Controller
                 $category->image = $newImgName;
                 $category->save();
 
-                // //Delete TempImage
-                // $imgId = $category->image_id;
-                // if (!empty($imgId)) {
-                //     $tempImage = TempImage::find($imgId);
-                //     $tempImage->delete();
-                //     $sPath = public_path() . '/temp_images/' . $tempImage->name;
-                //     File::delete($sPath);
-                // }
+                //Delete TempImage
+                $imgId = $category->image_id;
+                if (!empty($imgId)) {
+                    $tempImage = TempImage::find($imgId);
+                    $tempImage->delete();
+                    $sPath = public_path() . '/temp_images/thumb/' . $tempImage->name;
+                    File::delete($sPath);
+                }
             }
             session()->flash('success', 'Category Updated !!');
             return response()->json([

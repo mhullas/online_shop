@@ -195,7 +195,7 @@
 
                 <div class="pb-5 pt-3">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="products.html" class="btn btn-outline-dark ml-3">Cancel</a>
+                    <a href="{{ route('product.list') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </div>
         </form>
@@ -270,7 +270,7 @@
                     $("button[type='submit']").prop('disabled', false);
                     if (response['status'] == true) {
                         $('.error').removeClass('invalid-feedback').html('');
-                        $("input[type='text'], select").removeClass('is-invalid');
+                        $("input[type='text', type='number'], select").removeClass('is-invalid');
                         window.location.href = "{{ route('product.list') }}";
                     } else {
                         let errors = response['error'];
@@ -300,10 +300,8 @@
             },
             success: function(file, response) {
                 $("#image_id").val(response.image_id);
-                console.log(response)
-
                 var html = `<div class="col-md-3" id="image-row-${response.image_id}"><div class="card">
-               <input type="hidden" name="image_array[]" value="${response.image_id}">
+                <input type="hidden" name="image_array[]" value="${response.image_id}">
                 <img src="${response.imagePath}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-danger">Delete</a>
@@ -312,73 +310,13 @@
 
                 $("#productGallery").append(html);
             },
-            complete: function(file){
+            complete: function(file) {
                 this.removeFile(file);
             }
         });
 
-        function deleteImage(id){
-            $("#image-row-"+id).remove();
+        function deleteImage(id) {
+            $("#image-row-" + id).remove();
         }
-
-        // //image_delete
-        // Dropzone.autoDiscover = false;
-        // const mydropzone = $("#image").dropzone({
-        //     init: function() {
-        //         this.on("removedfile", function(file) {
-        //             // ইমেজের ID সংগ্রহ করুন (যদি প্রয়োজন হয়)
-        //             let imageId = file.imageId;
-
-        //             if (imageId) {
-        //                 // AJAX ডিলিট রিকুয়েস্ট
-        //                 fetch(`/image-remove/${imageId}`, {
-        //                         method: 'DELETE',
-        //                         headers: {
-        //                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-        //                                 .getAttribute('content'),
-        //                         },
-        //                     })
-        //                     .then(response => response.json())
-        //                     .then(data => {
-        //                         if (data.error) {
-        //                             alert(data.error);
-        //                         } else {
-        //                             console.log(data.success);
-        //                         }
-        //                     })
-        //                     .catch(error => console.error('Error:', error));
-        //             }
-        //         });
-        // });
-        
-        // Dropzone.options.myDropzone = {
-        //     // Dropzone এর অন্যান্য অপশন
-        //     init: function() {
-        //         this.on("removedfile", function(file) {
-        //             // ইমেজের ID সংগ্রহ করুন (যদি প্রয়োজন হয়)
-        //             let imageId = file.imageId;
-
-        //             if (imageId) {
-        //                 // AJAX ডিলিট রিকুয়েস্ট
-        //                 fetch(`/image-remove/${imageId}`, {
-        //                         method: 'DELETE',
-        //                         headers: {
-        //                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-        //                                 .getAttribute('content'),
-        //                         },
-        //                     })
-        //                     .then(response => response.json())
-        //                     .then(data => {
-        //                         if (data.error) {
-        //                             alert(data.error);
-        //                         } else {
-        //                             console.log(data.success);
-        //                         }
-        //                     })
-        //                     .catch(error => console.error('Error:', error));
-        //             }
-        //         });
-        //     }
-        // };
     </script>
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProductImageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,13 @@ Route::group(['prefix' => 'admin'], function(){
             Route::get('/product-subcategory', 'getSubCategory')->name('product-subcategory.getSubCategory');
             Route::post('/product/store', 'store')->name('product.store');
             Route::get('/product/edit/{id}', 'edit')->name('product.edit');
+            Route::put('/product/{product}', 'update')->name('product.update');
+        });
+        Route::post('/product-images/update',[ProductImageController::class,'update'])->name('product-images.update');
+
+        Route::controller(ProductImageController::class)->group(function(){
+            Route::post('/product-images/update', 'update')->name('product-images.update');
+            Route::delete('/product-images/delete', 'delete')->name('product-images.delete');
 
         });
     });

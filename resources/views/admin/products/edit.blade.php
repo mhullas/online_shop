@@ -61,7 +61,21 @@
                             </div>
                         </div>
                         <div class="row" id="productGallery">
-
+                            @if ($productImages->isNotEmpty())
+                                @foreach ($productImages as $image)
+                                    <div class="col-md-3" id="image-row-{{ $image->id }}">
+                                        <div class="card">
+                                            <input type="hidden" name="image_array[]" value="{{ $image->id }}">
+                                            <img src="{{ asset('Uploads/Product/Small/' . $image->image) }}"
+                                                class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})"
+                                                    class="btn btn-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                         <div class="card mb-3">
                             <div class="card-body">
@@ -114,7 +128,8 @@
                                             <div class="custom-control custom-checkbox">
                                                 <input type="hidden" name="track_qty" value="No">
                                                 <input class="custom-control-input" type="checkbox" id="track_qty"
-                                                    name="track_qty" value="Yes" {{ ($products->track_qty == 'Yes' ? 'checked':'') }}>
+                                                    name="track_qty" value="Yes"
+                                                    {{ $products->track_qty == 'Yes' ? 'checked' : '' }}>
                                                 <label for="track_qty" class="custom-control-label">Track Quantity</label>
                                             </div>
                                         </div>
@@ -183,7 +198,8 @@
                                         <option value="">Select a brand</option>
                                         @if ($brands->isNotEmpty())
                                             @foreach ($brands as $brand)
-                                                <option {{ $products->brand_id == $brand->id ? 'selected':'' }} value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                                <option {{ $products->brand_id == $brand->id ? 'selected' : '' }}
+                                                    value="{{ $brand->id }}">{{ $brand->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -207,7 +223,7 @@
                 </div>
 
                 <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                     <a href="products.html" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </div>
@@ -275,8 +291,8 @@
             $("button[type='submit']").prop('disabled', true);
 
             $.ajax({
-                url: "{{ route('product.store') }}",
-                type: 'post',
+                url: "{{ route('product.update', $products->id) }}",
+                type: 'put',
                 data: $(this).serializeArray(),
                 dataType: 'json',
                 success: function(response) {
@@ -303,9 +319,12 @@
         //image_upload
         Dropzone.autoDiscover = false;
         const dropzone = $("#image").dropzone({
-            url: "{{ route('temp-images.create') }}",
+            url: "{{ route('product-images.update') }}",
             maxFiles: 10,
             paramName: 'image',
+            params: {
+                'product_id': '{{ $products->id }}'
+            },
             addRemoveLinks: true,
             acceptedFiles: "image/jpeg,image/png,image/gif",
             headers: {
@@ -313,10 +332,10 @@
             },
             success: function(file, response) {
                 $("#image_id").val(response.image_id);
-                console.log(response)
+                // console.log(response)
 
                 var html = `<div class="col-md-3" id="image-row-${response.image_id}"><div class="card">
-               <input type="hidden" name="image_array[]" value="${response.image_id}">
+                <input type="hidden" name="image_array[]" value="${response.image_id}">
                 <img src="${response.imagePath}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-danger">Delete</a>
@@ -332,6 +351,14 @@
 
         function deleteImage(id) {
             $("#image-row-" + id).remove();
+            $.ajax({
+                url: '{{ route('product-images.delete') }}',
+                type: 'delete',
+                data: {
+                    id: id
+                },
+                success: function(response) {}
+            });
         }
     </script>
 @endsection
