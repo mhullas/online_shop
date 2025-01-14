@@ -31,34 +31,39 @@ class CategoryController extends Controller
     public function getCategories()
     {
         $categories = Category::latest()->get();
+
         return DataTables::of($categories)
             ->addIndexColumn()
             ->addColumn('action', function ($data) {
-                $btn =  '<a href="javascript://" class="edit_cat" data-id="' . $data->id . '">
-                                            <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path
-                                                    d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
-                                                </path>
-                                            </svg>
-                                        </a>';
+                // Debugging
+                // Uncomment to check structure
+
+                $btn = '<a href="javascript://" class="edit_cat" data-id="' . $data->id . '">
+                        <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                            </path>
+                        </svg>
+                    </a>';
                 $btn .= '<a href="javascript://" data-record-id="' . $data->id . '"
-                                            data-record-title="' . $data->name . '" data-toggle="modal"
-                                            data-target="#category_delete" class="text-danger w-4 h-4 mr-1">
-                                            <svg wire:loading.remove.delay="" wire:target=""
-                                                class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path ath fill-rule="evenodd"
-                                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                    clip-rule="evenodd">
-                                                </path>
-                                            </svg>
-                                        </a>';
+                        data-record-title="' . $data->name . '" data-toggle="modal"
+                        data-target="#confirm_delete" class="text-danger w-4 h-4 mr-1">
+                        <svg wire:loading.remove.delay="" wire:target=""
+                            class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path ath fill-rule="evenodd"
+                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd">
+                            </path>
+                        </svg>
+                    </a>';
+                    dd($data->id);
                 return $btn;
             })
             ->rawColumns(['action']) // Ensures HTML is rendered in the action column
             ->make(true);
     }
+
 
     public function create()
     {
@@ -108,14 +113,14 @@ class CategoryController extends Controller
                     $sPath = public_path() . '/temp_images/thumb/' . $tempImage->name;
                     File::delete($sPath);
                 }
+            } else {
+                return redirect()->route('category.list');
             }
             session()->flash('success', 'Category Added !!');
             return response()->json([
                 'status' => true,
                 'message' => 'Category Added !!'
             ]);
-
-            return redirect()->route('category.list')->with('success', 'Category Added !!');
         } else {
             return response()->json([
                 'status' => false,
@@ -137,6 +142,7 @@ class CategoryController extends Controller
     {
 
         $category = Category::find($categoryId);
+
         if (empty($category)) {
             session()->flash('error', 'Category not Found !!');
             return response()->json([
@@ -160,7 +166,14 @@ class CategoryController extends Controller
 
             //image Upload
             $img_id = $request->up_imageId;
-            if (!empty($img_id)) {
+            $oldImg_id = $request->getImgId;
+            $categoryImg = $category->image_id;
+            
+            if ($img_id == $oldImg_id) {
+                return response()->json([
+                    'notUpdate' => true
+                ]);
+            } elseif (!empty($img_id)){
                 $tempImage = new TempImage();
                 $imgFind = $tempImage->find($img_id);
                 $extArray = explode('.', $imgFind->name);
@@ -189,10 +202,8 @@ class CategoryController extends Controller
             session()->flash('success', 'Category Updated !!');
             return response()->json([
                 'status' => true,
-                'message' => 'Category Added !!'
+                'message' => 'Category Updated.'
             ]);
-
-            return redirect()->route('category.list')->with('success', 'Category Updated !!');
         } else {
             return response()->json([
                 'status' => false,
@@ -201,7 +212,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function destroy($id, Request $request)
+    public function destroy($id)
     {
         $category = Category::find($id);
         if (empty($category)) {

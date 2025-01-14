@@ -150,7 +150,7 @@
     });
 
     //delete blade
-    $('#brand-delete').on('click', '.btn-ok', function(e) {
+    $('#confirm_delete').on('click', '.btn_ok', function(e) {
         var $modalDiv = $(e.delegateTarget);
         var id = $(this).data('recordId');
         let url = "{{ route('brand.delete', 'ID') }}";
@@ -175,7 +175,7 @@
             $modalDiv.modal('hide').removeClass('loading');
         }, 1000)
     });
-    $('#brand-delete').on('show.bs.modal', function(e) {
+    $('#confirm_delete').on('show.bs.modal', function(e) {
         var data = $(e.relatedTarget).data();
         $('.title', this).text(data.recordTitle);
         $('.btn-ok', this).data('recordId', data.recordId);

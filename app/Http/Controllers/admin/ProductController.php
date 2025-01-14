@@ -219,6 +219,34 @@ class ProductController extends Controller
             ]);
         }
     }
+
+    public function delete($id) {
+        $product = Product::find($id);
+        session()->flash('error', 'Product not found.');
+        if(empty($product)){
+            return response()->json([
+                'status' => false,
+                'notFound' => true
+            ]);
+        }
+
+        $productImages = ProductImage::where('product_id', $id)->get();
+        if (!empty($productImages)){
+            foreach($productImages as $productImage){
+                File::delete(public_path('/Uploads/Product/Large/'. $productImage->image));
+                File::delete(public_path('/Uploads/Product/Small/'. $productImage->image));
+            }
+            ProductImage::where('product_id', $id)->delete();
+        }
+
+        $product->delete();
+        session()->flash('success', 'Product deleted !!');
+        return response()->json([
+            'status' => true,
+            'message' => 'Product deleted.'
+        ]);
+
+    }
 }
 
 // comment for testing 

@@ -145,6 +145,7 @@
             success: function(response) {
                 // console.log(response.getCategory.name);
                 $('#up_imageId').val(response.getCategory.image_id);
+                $('#getImgId').val(response.getCategory.image_id);
                 $('#up_name').val(response.getCategory.name);
                 $('#up_slug').val(response.getCategory.slug);
                 $('#showimg').prop('src', '/Uploads/Category/thumb/' + response.getCategory.image);
@@ -178,7 +179,7 @@
             data: $(this).serializeArray(),
             dataType: 'json',
             success: function(response) {
-                if (response["status"] == true) {
+                if (response.status === true || response.notUpdate === true) {
                     window.location.href = "{{ route('category.list') }}";
                 } else {
                     if (response['notfound'] == true) {
@@ -211,9 +212,11 @@
     });
 
     //delete blade
-    $('#category_delete').on('click', '.btn_ok', function(e) {
+    $('#confirm_delete').on('click', '.btn_ok', function(e) {
         var $modalDiv = $(e.delegateTarget);
         var id = $(this).data('id');
+        console.log(id);
+        abort();
         $.ajax({
             url: '/admin/category/delete/' + id,
             type: 'delete',
@@ -243,7 +246,6 @@
     });
     $('#category_delete').on('show.bs.modal', function(e) {
         var data = $(e.relatedTarget).data();
-        console.log(data);
         $('.title', this).text(data.recordTitle);
         $('.btn_ok', this).data('id', data.recordId);
     });

@@ -86,7 +86,7 @@
                                         </a>
                                         <a href="javascript://" data-record-id="{{ $item->id }}"
                                             data-record-title="{{ $item->name }}" data-toggle="modal"
-                                            data-target="#confirm-SubDelete" class="text-danger w-4 h-4 mr-1">
+                                            data-target="#confirm_delete" class="text-danger w-4 h-4 mr-1">
                                             <svg wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

@@ -170,7 +170,7 @@
     });
 
     //delete blade
-    $('#confirm-SubDelete').on('click', '.btn-ok', function(e) {
+    $('#confirm_delete').on('click', '.btn_ok', function(e) {
         var $modalDiv = $(e.delegateTarget);
         var id = $(this).data('recordId');
         $.ajax({
@@ -192,7 +192,7 @@
             $modalDiv.modal('hide').removeClass('loading');
         }, 1000)
     });
-    $('#confirm-SubDelete').on('show.bs.modal', function(e) {
+    $('#confirm_delete').on('show.bs.modal', function(e) {
         var data = $(e.relatedTarget).data();
         $('.title', this).text(data.recordTitle);
         $('.btn-ok', this).data('recordId', data.recordId);

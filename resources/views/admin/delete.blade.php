@@ -1,11 +1,11 @@
 
 
 
-<div class="modal fade" id="category_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirm_delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Category Delete</h4>
+                <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
             </div>
             <div class="modal-body">
                 <p>You are about to delete <b><i class="title"></i></b> record, this procedure is irreversible !!</p>
@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirm-SubDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+{{-- <div class="modal fade" id="confirm-SubDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -73,4 +73,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
