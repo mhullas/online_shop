@@ -8,13 +8,18 @@ use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
+use App\Http\Controllers\FrontController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [FrontController::class, 'index'])->name('front.home');
+
+
 
 
 Route::group(['prefix' => 'admin'], function(){
@@ -31,7 +36,6 @@ Route::group(['prefix' => 'admin'], function(){
         //Category
         Route::controller(CategoryController::class)->group(function(){
             Route::get('/category/list', 'index')->name('category.list');
-            Route::get('/category/getCategories', 'getCategories')->name('category.getCategories');
             Route::get('/category/create', 'create')->name('category.create');
             Route::get('/category/edit/{id}', 'edit')->name('category.edit');
             Route::post('/category/store', 'store')->name('category.store');
@@ -67,7 +71,7 @@ Route::group(['prefix' => 'admin'], function(){
 
         //Products
         Route::controller(ProductController::class)->group(function(){
-            Route::get('/product/list', 'list')->name('product.list');
+            Route::get('/product/list', 'index')->name('product.list');
             Route::get('/product/create', 'create')->name('product.create');
             Route::get('/product-subcategory', 'getSubCategory')->name('product-subcategory.getSubCategory');
             Route::post('/product/store', 'store')->name('product.store');

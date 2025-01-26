@@ -19,8 +19,9 @@
         <!-- Default box -->
         <div class="container-fluid">
             @include('admin.message')
+            @include('admin.delete')
             <div class="card">
-                <form action="" method="get">
+                {{-- <form action="" method="get">
                     <div class="card-header">
                         <div class="card-title">
                             <button type="button" onclick="window.location.href= '{{ route('product.list') }}'"
@@ -39,13 +40,14 @@
                             </div>
                         </div>
                     </div>
-                </form>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
+                </form> --}}
+                <div class="card-body table-responsive p-3">
+                    <table class="table table-hover table-striped table-borderless text-nowrap" style="width: 100%;"
+                        id="productTable">
                         <thead>
                             <tr>
                                 <th width="60">ID</th>
-                                <th width="80"></th>
+                                <th width="20"></th>
                                 <th>Product</th>
                                 <th>Price</th>
                                 <th>Qty</th>
@@ -54,7 +56,7 @@
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @if ($products->isNotEmpty())
                                 @foreach ($products as $product)
                                     @php
@@ -94,7 +96,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('product.edit', $product->id) }}" >
+                                            <a href="{{ route('product.edit', $product->id) }}">
                                                 <svg class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                     fill="currentColor" aria-hidden="true">
@@ -103,7 +105,9 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="#" class="text-danger w-4 h-4 mr-1">
+                                            <a href="javascript://" data-record-id="{{ $product->id }}"
+                                                data-record-title="{{ $product->title }}" data-record-tag="product" data-toggle="modal"
+                                                data-target="#confirm_delete" class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -117,12 +121,12 @@
                                     </tr>
                                 @endforeach
                             @endif
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
-                <div class="card-footer clearfix">
+                {{-- <div class="card-footer clearfix">
                     {{ $products->links() }}
-                </div>
+                </div> --}}
             </div>
         </div>
         <!-- /.card -->
@@ -132,4 +136,117 @@
     <!-- /.content-wrapper -->
 @endsection
 @section('customJs')
+    <script>
+        $(document).ready(function() {
+            $('#productTable').DataTable({
+                procceing: true,
+                serverSide: true,
+                ajax: '{{ route('product.list') }}',
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        data: 'product_images',
+                        name: 'product_images',
+                        orderable: false, // Disable sorting for images
+                        searchable: false, // Disable search if not needed
+                        render: function(data, type, row) {
+                            if (row.product_images && row.product_images.length > 0) {
+                                return `<img src="/Uploads/Product/Small/${row.product_images[0].image}" alt="Image" width="50">`;
+                            } else {
+                                return `<img src="/admin-assets/img/default-150x150.png" alt="No Image" width="50">`;
+                            }
+                        }
+                    },
+                    {
+                        data: 'title',
+                        name: 'title',
+                    },
+                    {
+                        data: 'price',
+                        name: 'price',
+                    },
+                    {
+                        data: 'qty',
+                        name: 'qty',
+                    },
+                    {
+                        data: 'sku',
+                        name: 'sku',
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        render: function(data) {
+                            if (data == 1) {
+                                return `<svg class="text-success-500 h-6 w-6 text-success"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>`;
+                            } else {
+                                return `<svg class="text-danger h-6 w-6" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" aria-hidden="true">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                    </path>
+                                                </svg>`;
+                            }
+                        },
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true, // Ensure responsiveness
+                "initComplete": function(settings, json) {
+                    // Apply text wrapping to td elements after table load
+                    $('#productTable').css({
+                        'white-space': 'normal',
+                        'word-wrap': 'break-word',
+                        'word-break': 'break-word'
+                    });
+                }
+            });
+        });
+
+
+        //delete blade
+        $('#confirm_delete').on('click', '.btn_ok', function(e) {
+            var $modalDiv = $(e.delegateTarget);
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/admin/product/' + id,
+                type: 'delete',
+                data: {},
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response["status"] == true) {
+                        window.location.href = "{{ route('product.list') }}";
+                    }
+                }
+            });
+            $modalDiv.addClass('loading');
+            setTimeout(function() {
+                $modalDiv.modal('hide').removeClass('loading');
+            }, 100)
+        });
+        $('#confirm_delete').on('show.bs.modal', function(e) {
+            var data = $(e.relatedTarget).data();
+            $('.title', this).text(data.recordTitle);
+            $('.tag', this).text(data.recordTag);
+            $('.btn_ok', this).data('id', data.recordId);
+        });
+    </script>
 @endsection

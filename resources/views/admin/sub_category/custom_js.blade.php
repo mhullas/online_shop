@@ -1,6 +1,5 @@
 <script>
-    
-    new DataTable('#myTable');
+    // new DataTable('#myTable');
 
     //form_submit
     $('#subCategoryForm').submit(function(event) {
@@ -173,6 +172,7 @@
     $('#confirm_delete').on('click', '.btn_ok', function(e) {
         var $modalDiv = $(e.delegateTarget);
         var id = $(this).data('recordId');
+        console.log(id);
         $.ajax({
             url: '/admin/sub-category/delete/' + id,
             type: 'delete',
@@ -195,7 +195,8 @@
     $('#confirm_delete').on('show.bs.modal', function(e) {
         var data = $(e.relatedTarget).data();
         $('.title', this).text(data.recordTitle);
-        $('.btn-ok', this).data('recordId', data.recordId);
+        $('.tag', this).text(data.recordTag);
+        $('.btn_ok', this).data('recordId', data.recordId);
     });
 
     // //Delete Sub Category

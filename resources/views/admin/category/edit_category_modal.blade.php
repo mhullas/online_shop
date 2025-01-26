@@ -12,6 +12,9 @@
             <div class="modal-body">
                 <form action="" method="PUT" id="updateCategoryForm">
                     <input type="hidden" id="cat_up_id" name="cat_up_id">
+                    <input type="hidden" id="oldUpName" name="oldUpName">
+                    <input type="hidden" id="oldUpSlug" name="oldUpSlug">
+                    <input type="hidden" id="oldUpStatus" name="oldUpStatus">
                     <div class="container-fluid">
                         <div class="card col-md-12">
                             <div class="card-body">
@@ -34,8 +37,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <input type="text" name="up_imageId" id="up_imageId" value="">
-                                            <input type="text" name="getImgId" id="getImgId" value="">
+                                            <input type="hidden" name="up_imageId" id="up_imageId" value="">
+                                            <input type="hidden" name="getImgId" id="getImgId" value="">
                                             <label for="name">Image</label>
                                             <div class="mb-3">
                                                 <img id="showimg" width="250px" src="" alt="">

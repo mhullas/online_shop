@@ -21,32 +21,20 @@ class CategoryController extends Controller
     // }
     public function index(Request $request)
     {
-
-        return view('admin.category.list');
-
-        // $categories = Category::latest()->get();
-        // return view('admin.category.list', compact('categories'));
-    }
-
-    public function getCategories()
-    {
-        $categories = Category::latest()->get();
-
-        return DataTables::of($categories)
-            ->addIndexColumn()
-            ->addColumn('action', function ($data) {
-                // Debugging
-                // Uncomment to check structure
-
-                $btn = '<a href="javascript://" class="edit_cat" data-id="' . $data->id . '">
+        if ($request->ajax()) {
+            $categories = Category::latest()->get();
+            return DataTables::of($categories)
+                ->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $btn = '<a href="javascript://" class="edit_cat" data-id="' . $data->id . '">
                         <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
                             </path>
                         </svg>
                     </a>';
-                $btn .= '<a href="javascript://" data-record-id="' . $data->id . '"
-                        data-record-title="' . $data->name . '" data-toggle="modal"
+                    $btn .= '<a href="javascript://" data-record-id="' . $data->id . '"
+                        data-record-title="' . $data->name . '" data-record-tag="category" data-toggle="modal"
                         data-target="#confirm_delete" class="text-danger w-4 h-4 mr-1">
                         <svg wire:loading.remove.delay="" wire:target=""
                             class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
@@ -57,13 +45,13 @@ class CategoryController extends Controller
                             </path>
                         </svg>
                     </a>';
-                    dd($data->id);
-                return $btn;
-            })
-            ->rawColumns(['action']) // Ensures HTML is rendered in the action column
-            ->make(true);
+                    return $btn;
+                })
+                ->rawColumns(['action']) // Ensures HTML is rendered in the action column
+                ->make(true);
+        }
+        return view('admin.category.list');
     }
-
 
     public function create()
     {
@@ -167,13 +155,13 @@ class CategoryController extends Controller
             //image Upload
             $img_id = $request->up_imageId;
             $oldImg_id = $request->getImgId;
-            $categoryImg = $category->image_id;
-            
-            if ($img_id == $oldImg_id) {
+
+            if (($img_id == $oldImg_id) && ($category->name == $request->oldUpName) && ($category->slug == $request->oldUpSlug) && ($category->status == $request->oldUpStatus)) {
+                session()->flash('success', 'Nothing Updated !!');
                 return response()->json([
                     'notUpdate' => true
                 ]);
-            } elseif (!empty($img_id)){
+            } elseif (!empty($img_id) && ($img_id != $oldImg_id)) {
                 $tempImage = new TempImage();
                 $imgFind = $tempImage->find($img_id);
                 $extArray = explode('.', $imgFind->name);
@@ -198,12 +186,18 @@ class CategoryController extends Controller
                     $sPath = public_path() . '/temp_images/thumb/' . $tempImage->name;
                     File::delete($sPath);
                 }
+                session()->flash('success', 'Category Updated !!');
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Category Updated.'
+                ]);
+            } else {
+                session()->flash('success', 'Category Updated !!');
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Category Updated.'
+                ]);
             }
-            session()->flash('success', 'Category Updated !!');
-            return response()->json([
-                'status' => true,
-                'message' => 'Category Updated.'
-            ]);
         } else {
             return response()->json([
                 'status' => false,

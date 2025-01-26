@@ -270,7 +270,7 @@
                     $("button[type='submit']").prop('disabled', false);
                     if (response['status'] == true) {
                         $('.error').removeClass('invalid-feedback').html('');
-                        $("input[type='text', type='number'], select").removeClass('is-invalid');
+                        $("input[type='text'], input[type='number'], select").removeClass('is-invalid');
                         window.location.href = "{{ route('product.list') }}";
                     } else {
                         let errors = response['error'];

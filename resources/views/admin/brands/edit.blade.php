@@ -11,7 +11,7 @@
             </div>
             <div class="modal-body">
                 <form action="" method="POST" id="editBrandForm">
-                    <input type="text" name="brand_up_id" id="brand_up_id">
+                    <input type="hidden" name="brand_up_id" id="brand_up_id">
                     <div class="container-fluid">
                         <div class="card col-md-12">
                             <div class="card-body">

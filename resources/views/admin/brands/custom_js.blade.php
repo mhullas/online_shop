@@ -1,6 +1,4 @@
 <script>
-    // new DataTable('#myTable');
-
     $('#edit_brand').on('hidden.bs.modal', function() {
         $('#name').removeClass('is-invalid').siblings('p').removeClass(
             'invalid-feedback').html('');
@@ -178,29 +176,30 @@
     $('#confirm_delete').on('show.bs.modal', function(e) {
         var data = $(e.relatedTarget).data();
         $('.title', this).text(data.recordTitle);
-        $('.btn-ok', this).data('recordId', data.recordId);
+        $('.tag', this).text(data.recordTag);
+        $('.btn_ok', this).data('recordId', data.recordId);
     });
 
-    //Paginate
-    $(document).on('click', '.pagination a', function(e) {
-        e.preventDefault();
-        let page = $(this).attr('href').split('page=')[1];
-        //console.log(page);
-        product(page)
-    });
+    // //Paginate
+    // $(document).on('click', '.pagination a', function(e) {
+    //     e.preventDefault();
+    //     let page = $(this).attr('href').split('page=')[1];
+    //     //console.log(page);
+    //     product(page)
+    // });
 
-    function product(page) {
-        let _token = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-            url: "{{ route('brand.paginate') }}",
-            method: 'get',
-            data: {
-                _token: _token,
-                page: page
-            },
-            success: function(data) {
-                $('.table-data').html(data);
-            }
-        });
-    }
+    // function product(page) {
+    //     let _token = $('meta[name="csrf-token"]').attr('content');
+    //     $.ajax({
+    //         url: "{{ route('brand.paginate') }}",
+    //         method: 'get',
+    //         data: {
+    //             _token: _token,
+    //             page: page
+    //         },
+    //         success: function(data) {
+    //             $('.table-data').html(data);
+    //         }
+    //     });
+    // }
 </script>
