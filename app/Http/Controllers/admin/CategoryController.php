@@ -71,6 +71,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;
+            $category->showHome = $request->showHome;
             $category->image_id = $request->image_id;
             $category->save();
 
@@ -149,6 +150,7 @@ class CategoryController extends Controller
             $category->name = $request->up_name;
             $category->slug = $request->up_slug;
             $category->status = $request->up_status;
+            $category->showHome = $request->up_showHome;
             $category->image_id = $request->up_imageId;
             $category->save();
 
@@ -156,7 +158,7 @@ class CategoryController extends Controller
             $img_id = $request->up_imageId;
             $oldImg_id = $request->getImgId;
 
-            if (($img_id == $oldImg_id) && ($category->name == $request->oldUpName) && ($category->slug == $request->oldUpSlug) && ($category->status == $request->oldUpStatus)) {
+            if (($img_id == $oldImg_id) && ($category->name == $request->oldUpName) && ($category->slug == $request->oldUpSlug) && ($category->status == $request->oldUpStatus) && ($category->showHome == $request->oldUpshowHome)) {
                 session()->flash('success', 'Nothing Updated !!');
                 return response()->json([
                     'notUpdate' => true

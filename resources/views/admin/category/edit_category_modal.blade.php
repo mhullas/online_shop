@@ -15,6 +15,7 @@
                     <input type="hidden" id="oldUpName" name="oldUpName">
                     <input type="hidden" id="oldUpSlug" name="oldUpSlug">
                     <input type="hidden" id="oldUpStatus" name="oldUpStatus">
+                    <input type="hidden" id="oldUpshowHome" name="oldUpshowHome">
                     <div class="container-fluid">
                         <div class="card col-md-12">
                             <div class="card-body">
@@ -56,6 +57,15 @@
                                             <select name="up_status" id="up_status" class="form-control">
                                                 <option value="1">Active</option>
                                                 <option value="0">Block</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="up_showHome">ShowHome</label>
+                                            <select name="up_showHome" id="up_showHome" class="form-control">
+                                                <option value="Yes">Yes</option>
+                                                <option value="No">No</option>
                                             </select>
                                         </div>
                                     </div>

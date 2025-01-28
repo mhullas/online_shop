@@ -44,10 +44,19 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="email">Status</label>
+                                            <label for="status">Status</label>
                                             <select name="status" id="status" class="form-control">
                                                 <option value="1">Active</option>
                                                 <option value="0">Block</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="showHome">ShowHome</label>
+                                            <select name="showHome" id="showHome" class="form-control">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
                                             </select>
                                         </div>
                                     </div>

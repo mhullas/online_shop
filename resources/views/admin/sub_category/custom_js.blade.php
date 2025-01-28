@@ -110,6 +110,7 @@
                 $('#up_name').val(response.getSubCategory.name);
                 $('#up_slug').val(response.getSubCategory.slug);
                 $('#up_status').val(response.getSubCategory.status);
+                $('#up_showHome').val(response.getSubCategory.showHome);
                 $('#updateId').val(response.getSubCategory.id);
             }
         });

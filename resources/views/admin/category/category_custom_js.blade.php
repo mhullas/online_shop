@@ -147,11 +147,13 @@
                 $('#up_slug').val(response.getCategory.slug);
                 $('#showimg').prop('src', '/Uploads/Category/thumb/' + response.getCategory.image);
                 $('#up_status').val(response.getCategory.status);
+                $('#up_showHome').val(response.getCategory.showHome);
                 $('#cat_up_id').val(response.getCategory.id);
                 $('#getImgId').val(response.getCategory.image_id);
                 $('#oldUpName').val(response.getCategory.name);
                 $('#oldUpSlug').val(response.getCategory.slug);
                 $('#oldUpStatus').val(response.getCategory.status);
+                $('#oldUpshowHome').val(response.getCategory.showHome);
 
             }
         });
