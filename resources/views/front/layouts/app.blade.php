@@ -99,14 +99,14 @@
                                         aria-expanded="false">
                                         {{ $category->name }}
                                     </button>
-                                    @if ($category->subcategories->isNotEmpty())
-                                        @foreach ($category->subcategories as $subCategory)
-                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        @if ($category->subcategories->isNotEmpty())
+                                            @foreach ($category->subcategories as $subCategory)
                                                 <li><a class="dropdown-item nav-link"
                                                         href="#">{{ $subCategory->name }}</a></li>
-                                            </ul>
-                                        @endforeach
-                                    @endif
+                                            @endforeach
+                                        @endif
+                                    </ul>
                                 </li>
                             @endforeach
                         @endif
