@@ -55,7 +55,7 @@
         <div class="container">
             <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
                 <div class="col-lg-4 logo">
-                    <a href="index.php" class="text-decoration-none">
+                    <a href="{{ route('front.home') }}" class="text-decoration-none">
                         <span class="h1 text-uppercase text-primary bg-dark px-2">Online</span>
                         <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">SHOP</span>
                     </a>
@@ -79,7 +79,7 @@
     <header class="bg-dark">
         <div class="container">
             <nav class="navbar navbar-expand-xl" id="navbar">
-                <a href="index.php" class="text-decoration-none mobile-logo">
+                <a href="{{ route('front.home') }}" class="text-decoration-none mobile-logo">
                     <span class="h2 text-uppercase text-primary bg-dark">Online</span>
                     <span class="h2 text-uppercase text-white px-2">SHOP</span>
                 </a>
@@ -103,14 +103,14 @@
                                         @if ($category->subcategories->isNotEmpty())
                                             @foreach ($category->subcategories as $subCategory)
                                                 <li><a class="dropdown-item nav-link"
-                                                        href="#">{{ $subCategory->name }}</a></li>
+                                                        href="{{ route('front.shop', [$category->slug, $subCategory->slug]) }}">{{ $subCategory->name }}</a></li>
                                             @endforeach
                                         @endif
                                     </ul>
                                 </li>
                             @endforeach
                         @endif
-
+                        
                     </ul>
                 </div>
                 <div class="right-nav py-0">

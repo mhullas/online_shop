@@ -126,6 +126,9 @@ class ProductController extends Controller
             $product->track_qty = $request->track_qty;
             $product->qty = $request->qty;
             $product->status = $request->status;
+            $product->shipping_returns = $request->shipping_returns;
+            $product->short_description = $request->short_description;
+
             $product->save();
 
             // Save Galleries
@@ -237,6 +240,8 @@ class ProductController extends Controller
             $product->track_qty = $request->track_qty;
             $product->qty = $request->qty;
             $product->status = $request->status;
+            $product->shipping_returns = $request->shipping_returns;
+            $product->short_description = $request->short_description;
             $product->save();
 
             // Save Galleries
@@ -278,6 +283,25 @@ class ProductController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Product deleted.'
+        ]);
+    }
+
+    public function getProducts(Request $request){
+
+        $tempProduct = [];
+        if ($request->term != ""){
+            $products = Product::where('title','like','%'.$request->term.'%')->get();
+
+            if ($products != null){
+                foreach ($products as $product) {
+                    $tempProduct[] = array('id' => $product->id, 'text' => $product->title);
+                }
+            }
+        }
+
+        return response()->json([
+            'tags' => $tempProduct,
+            'status' => true
         ]);
     }
 }

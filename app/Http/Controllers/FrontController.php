@@ -9,7 +9,6 @@ class FrontController extends Controller
 {
     public function index()
     {
-
         $products = Product::orderBy('id', 'DESC')
             ->where('is_featured', 'Yes')
             ->where('status', 1)

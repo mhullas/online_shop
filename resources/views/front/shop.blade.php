@@ -112,10 +112,10 @@
                                     </div> --}}
 
                                     <select name="sort" id="sort" class="form-control">
-                                        <option value="latest" {{ ($sort == 'latest') ? 'selected' : '' }}>Latest</option>
-                                        <option value="price_desc" {{ ($sort == 'price_desc') ? 'selected' : '' }}>Price
+                                        <option value="latest" {{ $sort == 'latest' ? 'selected' : '' }}>Latest</option>
+                                        <option value="price_desc" {{ $sort == 'price_desc' ? 'selected' : '' }}>Price
                                             High</option>
-                                        <option value="price_asc" {{ ($sort == 'price_asc') ? 'selected' : '' }}>Price Low
+                                        <option value="price_asc" {{ $sort == 'price_asc' ? 'selected' : '' }}>Price Low
                                         </option>
                                     </select>
 
@@ -168,7 +168,7 @@
                         <div class="col-md-12 pt-5">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-end">
-                                    {{ $products->links() }}
+                                    {{ $products->withQueryString()->links() }}
                                     {{-- <li class="page-item disabled">
                                         <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
                                     </li>

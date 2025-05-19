@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin-assets/plugins/select2/css/select2.min.css') }}">
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
@@ -104,8 +105,10 @@
     <script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
     <script src="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.js') }}"></script>
     <script src="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('admin-assets/plugins/select2/js/select2.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
+    
     <!-- CSRF TOKEN -->
     <script type="text/javascript">
         $.ajaxSetup({
