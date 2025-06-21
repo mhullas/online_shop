@@ -183,10 +183,17 @@ class ProductController extends Controller
     public function edit($id)
     {
         $data = [];
+        $relatedProducts = [];
         $products = Product::find($id);
 
         if (empty($products)) {
             return redirect()->route('product.list')->with('error', 'Product not found !!');
+        }
+
+        //fetch related_product
+        if ($products->related_products != ''){
+            $productArray = explode(',',$products->related_products);
+            $relatedProducts = Product::whereIn('id', $productArray)->get();
         }
 
         //Get Product Image
@@ -199,6 +206,7 @@ class ProductController extends Controller
         $data['subCategories'] = $subCategories;
         $data['productImages'] = $productImages;
         $data['brands'] = $brands;
+        $data['relatedProducts'] = $relatedProducts;
 
         return view('admin.products.edit', $data);
     }
@@ -242,6 +250,7 @@ class ProductController extends Controller
             $product->status = $request->status;
             $product->shipping_returns = $request->shipping_returns;
             $product->short_description = $request->short_description;
+            $product->related_products = (!empty($request->related_products)) ? implode(',',$request->related_products) : '';
             $product->save();
 
             // Save Galleries

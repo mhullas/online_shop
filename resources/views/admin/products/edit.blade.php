@@ -237,8 +237,13 @@
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Related product</h2>
                                 <div class="mb-3">
-                                    <select multiple class="related_product w-100" name="related_products" id="related_products">
-
+                                    <select multiple class="form-control related_product w-100" name="related_products[]"
+                                        id="related_products">
+                                        @if (!empty($relatedProducts))
+                                            @foreach ($relatedProducts as $relProduct)
+                                                <option selected value="{{ $relProduct->id }}">{{ $relProduct->title }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -259,10 +264,9 @@
 @endsection
 @section('customJs')
     <script>
-
         $('.related_product').select2({
             ajax: {
-                url: '{{ route("product.getProducts") }}',
+                url: '{{ route('product.getProducts') }}',
                 dataType: 'json',
                 tags: true,
                 multiple: true,
